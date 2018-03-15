@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller
-@RequestMapping("admin")
 public class AdminViewController extends AdminController {
 
     @Autowired

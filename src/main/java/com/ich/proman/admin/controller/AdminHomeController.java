@@ -62,7 +62,8 @@ public class AdminHomeController extends AdminController {
         }
         model.put("topMenu", topMenu);//配置数据
         model.put("topWindow", topWindow);
-        return new ModelAndView("admin/index",model);
+        model.put("hello", "hello");
+        return new ModelAndView("home",model);
     }
 
     @RequestMapping(value="employeeMenus",produces= MediaType.APPLICATION_JSON_VALUE+";charset=utf-8")
@@ -142,7 +143,7 @@ public class AdminHomeController extends AdminController {
     }
 
     /** 员工修改密码 */
-    @RequestMapping("home/editkey")
+    @RequestMapping("editkey")
     @ResponseBody
     @Link(name = "员工-修改密码",code = "admin-home-editkey",level = Link.LEVEL_NONE,parent = "ICH-ADMIN")
     public String editKey(String oldkey,String newkey,String callback){

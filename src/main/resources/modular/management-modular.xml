@@ -7,25 +7,24 @@
  -->
 <modular name="运营管理平台" code="ICH-ADMIN" version="1.01b">
 
-    <catalog name="会员管理" code="admin-customer" sequence="0">
-        <!-- 会员列表、注销、余额、-->
-        <menu name="会员管理" code="admin-customer-user-index" view="admin/customer/userIndex" />
-        <menu name="软文列表" code="admin-customer-note-index" view="admin/customer/noteIndex" />
-        <menu name="会员举报" code="admin-customer-witnesses-index" view="admin/customer/witnessesIndex" />
-        <menu name="意见反馈" code="admin-customer-feedback-index" view="admin/customer/feedbackIndex" />
+    <catalog name="项目管理" code="admin-pro" sequence="0">
+        <menu name="项目中心" code="admin-pro-center-index" view="pro/userIndex" />
     </catalog>
-
+    <catalog name="日志管理" code="admin-note" sequence="0">
+        <menu name="我的日志" code="admin-note-my-index" view="note/userIndex" />
+        <menu name="日志中心" code="admin-note-center-index" view="note/noteIndex" />
+    </catalog>
 	
     <catalog name="系统配置" code="admin-system" sequence="99">
-        <menu name="系统参数" code="admin-system-config-index" view="admin/system/configIndex" />
-        <menu name="系统版本管理" code="admin-system-versionapp" view="admin/system/versionappIndex" />
-        <menu name="公共类目管理" code="admin-system-category" view="admin/system/categoryIndex" />
+        <menu name="系统参数" code="admin-system-config-index" view="system/configIndex" />
+        <menu name="系统版本管理" code="admin-system-versionapp" view="system/versionappIndex" />
+        <menu name="公共类目管理" code="admin-system-category" view="system/categoryIndex" />
     </catalog>
 
     <catalog name="员工账户管理" code="admin-employee" sequence="98">
-        <menu name="员工管理" code="admin-employee-index" view="admin/employee/employeeIndex" />
-        <menu name="组织机构管理" code="admin-organization-index" view="admin/employee/organizationIndex" />
-        <menu name="职位权限管理" code="admin-position-index" view="admin/employee/positionIndex" />
+        <menu name="员工管理" code="admin-employee-index" view="employee/employeeIndex" />
+        <menu name="组织机构管理" code="admin-organization-index" view="employee/organizationIndex" />
+        <menu name="职位权限管理" code="admin-position-index" view="employee/positionIndex" />
     </catalog>
 
 

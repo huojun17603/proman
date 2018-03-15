@@ -33,6 +33,13 @@
             }
         });
     }
+    //回车键快速登录【兼容】
+    document.onkeydown = function keyLogin(e){
+        e = e||event;
+        if (e.keyCode==13) {  //回车键的键值为13
+            login();
+        }
+    }
 </script>
 <body>
 <div class="login_box">

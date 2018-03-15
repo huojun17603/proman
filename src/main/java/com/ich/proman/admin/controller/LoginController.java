@@ -41,6 +41,6 @@ public class LoginController extends PromanController {
     @RequestMapping("out")
     public ModelAndView loginOut(HttpServletRequest request){
         request.getSession().invalidate();
-        return new ModelAndView("admin/loginView");
+        return new ModelAndView("index");
     }
 }
