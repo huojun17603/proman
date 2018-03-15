@@ -37,7 +37,7 @@ public interface ProjectCoreService {
      * 用于：
      * 1.把一个基础项目分割为多个项目，然后独立开发其不同的版本
      * 2.把一个项目版本完整的保留下来
-     * 方案：拷贝项目下所有信息
+     * 方案：拷贝项目下所有信息，除人员信息
      */
     public HttpResponse exeversion(String id,String version);
 
