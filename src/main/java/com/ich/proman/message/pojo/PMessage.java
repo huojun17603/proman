@@ -28,6 +28,73 @@ public class PMessage {
 
     private String sourceid;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Date getConfirmtime() {
+        return confirmtime;
+    }
+
+    public void setConfirmtime(Date confirmtime) {
+        this.confirmtime = confirmtime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
+    }
+
+    public String getSourceid() {
+        return sourceid;
+    }
+
+    public void setSourceid(String sourceid) {
+        this.sourceid = sourceid;
+    }
+    public static Integer UNREAD = 0;
+
+    public static Integer READ = 1;
+
     //*定义Source*//
     /** 项目立项 */
     public static Integer PROJECT_CREATE = 100;

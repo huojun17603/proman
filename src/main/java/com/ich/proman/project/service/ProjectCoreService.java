@@ -10,12 +10,11 @@ public interface ProjectCoreService {
 
     /**
      * 新增
-     * 用户可以增加一个新的项目，要求填写项目的基本信息，写入参与者并为其配置相应的角色。新的项目会自带首页，菜单，杂项三个模块；
+     * 用户可以增加一个新的项目，要求填写项目的基本信息。新的项目会自带首页，菜单，杂项三个模块；
      * @param project 项目信息
-     * @param roleList 参与者
      * @return
      */
-    public HttpResponse addNewProject(Project project, List<ProRole> roleList);
+    public HttpResponse addNewProject(Project project);
 
     /**
      * 修改：仅允许修改项目的名称

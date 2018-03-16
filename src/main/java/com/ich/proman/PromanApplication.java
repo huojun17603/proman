@@ -1,14 +1,15 @@
 package com.ich.proman;
 
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @Configuration
-@MapperScan({"com.ich.*.dao","com.ich.proman.*.mapper"})
+@ImportResource(value = {"classpath:spring/applicationContext-dao.xml",
+		"classpath:spring/applicationContext-trans.xml"})
 public class PromanApplication {
 
 	public static void main(String[] args) {
