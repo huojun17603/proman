@@ -1,6 +1,11 @@
 package com.ich.proman.project.service;
 
+import com.ich.proman.project.pojo.ProBug;
+
+import java.util.List;
+
 public interface ProBugService {
+    List<ProBug> findListByMid(String id);
 
     //新增：由测试人员从外部收集资料后，提出BUG（业务、数据、视图、错误）
 

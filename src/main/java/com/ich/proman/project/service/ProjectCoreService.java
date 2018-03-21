@@ -17,7 +17,7 @@ public interface ProjectCoreService {
     public HttpResponse addNewProject(Project project);
 
     /**
-     * 修改：仅允许修改项目的名称
+     * 修改：仅允许修改项目的名称，所有版本一起修改
      */
     public HttpResponse editProjectTitle(String id,String title);
 
@@ -44,5 +44,8 @@ public interface ProjectCoreService {
      * 验证当前项目是否可以操作
      */
     public boolean effective(String id);
+    /** 获取项目分组列表 */
+    List<Project> findGroupList();
 
+    List<Project> findVersions(String id);
 }

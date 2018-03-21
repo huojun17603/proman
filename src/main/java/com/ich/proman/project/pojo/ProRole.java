@@ -9,6 +9,16 @@ public class ProRole {
     //提供固定的角色
     /** 项目经理 */
     public static Integer PROJECT_MANAGER = 1;
+    /** 原型设计 */
+    public static Integer PROJECT_PROTOTYPE_MANAGER = 1;
+    /** 美工 */
+    public static Integer PROJECT_ART_MANAGER = 1;
+    /** 开发人员 */
+    public static Integer PROJECT_DEVELOP_MANAGER = 1;
+
+    public static String FINDROLENAME(Integer role) {
+        return  "";
+    }
 
     /** 项目角色人员ID */
     private String id;
@@ -60,4 +70,6 @@ public class ProRole {
     public void setRole(Integer role) {
         this.role = role;
     }
+
+
 }

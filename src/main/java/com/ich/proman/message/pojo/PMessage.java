@@ -108,6 +108,10 @@ public class PMessage {
     public static Integer PROJECT_ROLE_ADD = 200;
     /** 人员：退出项目 */
     public static Integer PROJECT_ROLE_DEL = 201;
+    /** 人员：参与项目（通知其他参与者） */
+    public static Integer PROJECT_ROLE_ADD_NOTICE = 202;
+    /** 人员：退出项目（通知其他参与者） */
+    public static Integer PROJECT_ROLE_DEL_NOTICE = 203;
     /** 模块：新增 */
     public static Integer PROJECT_MODULAR_CREATE = 300;
     /** 模块：修改名称 */
@@ -115,10 +119,19 @@ public class PMessage {
     /** 模块：删除 */
     public static Integer PROJECT_MODULAR_DEL = 302;
     /** 原型：新增 */
+    public static Integer PROJECT_PROTOTYPE_ADD = 400;
     /** 原型：修改标题 */
+    public static Integer PROJECT_PROTOTYPE_EDIT_TITLE = 401;
     /** 原型：迭代图片 */
+    public static Integer PROJECT_PROTOTYPE_EDIT_IMG = 402;
+    /** 原型：删除 */
+    public static Integer PROJECT_PROTOTYPE_DEL = 403;
     /** 原型：新增标记 */
+    public static Integer PROJECT_PROTOTYPE_TAG_ADD = 404;
     /** 原型：迭代标记 */
+    public static Integer PROJECT_PROTOTYPE_TAG_EDIT = 405;
+    /** 原型：引入标记 */
+    public static Integer PROJECT_PROTOTYPE_TAG_IMPORT = 406;
 
     /** 设计 500*/
 
@@ -159,10 +172,16 @@ public class PMessage {
             }
             /*/项目：参与人/*/
             if (PROJECT_ROLE_ADD.equals(source)) {
-                result = "您已被" + args[0] + "要求参与项目：" + args[1] + "（" + args[2] + "），请开始您的表演！";
+                result = "您已被要求参与项目：" + args[0] + "（" + args[1] + "），请开始您的表演！";
             }
             if (PROJECT_ROLE_DEL.equals(source)) {
-                result = "您已被" + args[0] + "要求退出项目：" + args[1] + "（" + args[2] + "）。";
+                result = "您已被要求退出项目：" + args[0] + "（" + args[1] + "）。";
+            }
+            if (PROJECT_ROLE_ADD_NOTICE.equals(source)) {
+                result = args[2] + "（" + args[3] + "）加入项目：" + args[0] + "（" + args[1] + "），大家热烈欢迎！";
+            }
+            if (PROJECT_ROLE_DEL_NOTICE.equals(source)) {
+                result = args[2] + "（" + args[3] + "）退出项目：" + args[0] + "（" + args[1] + "），真是遗憾啊！";
             }
             /*/项目：模块/*/
             if (PROJECT_MODULAR_CREATE.equals(source)) {

@@ -1,15 +1,17 @@
 package com.ich.proman.project.mapper;
 
 import com.ich.proman.project.pojo.ProRole;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface ProRoleMapper {
+
     void insert(ProRole role);
 
-    ProRole selectById(String id);
+    void delete(@Param("id") String id);
 
-    void delete(String id);
+    ProRole selectById(@Param("id") String id);
 
-    List<ProRole> selectByProId(String projectid);
+    List<ProRole> selectByProId(@Param("projectid") String projectid);
 }

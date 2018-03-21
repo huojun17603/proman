@@ -8,7 +8,7 @@
     </insert>
 
     <update id="updateTitle">
-        update pro_project set title = #{title} where id = #{id}
+        update pro_project set title = #{title} where versionid = #{id}
     </update>
 
     <update id="updateProjectToDel">
@@ -29,6 +29,14 @@
 
     <select id="selectByVersion" resultType="com.ich.proman.project.pojo.Project">
         select * from pro_project where versionid = #{versionid} and version = #{version}
+    </select>
+    
+    <select id="selectGroupByVersionid"  resultType="com.ich.proman.project.pojo.Project">
+        select * from pro_project group by versionid
+    </select>
+
+    <select id="selectVersionById"  resultType="com.ich.proman.project.pojo.Project">
+        select * from pro_project where versionid = #{id} order by iterationtime desc
     </select>
 
 </mapper>

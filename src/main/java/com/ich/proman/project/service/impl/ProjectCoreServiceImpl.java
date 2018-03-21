@@ -52,9 +52,9 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         project.setStatus(Constant.STATUS_NORMAL);
         projectCoreMapper.insert(project);
         /*/创建默认模块/*/
-//        modularService.addModular(project.getId(),"首页",true);
-//        modularService.addModular(project.getId(),"菜单",true);
-//        modularService.addModular(project.getId(),"杂项",true);
+        modularService.addModular(project.getId(),"首页",true);
+        modularService.addModular(project.getId(),"菜单",true);
+        modularService.addModular(project.getId(),"杂项",true);
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
@@ -136,5 +136,15 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         Project project = projectCoreMapper.selectById(id);
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return false;
         return true;
+    }
+
+    @Override
+    public List<Project> findGroupList() {
+        return projectCoreMapper.selectGroupByVersionid();
+    }
+
+    @Override
+    public List<Project> findVersions(String id) {
+        return projectCoreMapper.selectVersionById(id);
     }
 }

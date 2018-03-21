@@ -3,6 +3,8 @@ package com.ich.proman.project.mapper;
 import com.ich.proman.project.pojo.Project;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface ProjectCoreMapper {
 
     void insert(Project project);
@@ -19,4 +21,7 @@ public interface ProjectCoreMapper {
 
     Project selectByVersion(@Param("id") String id,@Param("version") String version);
 
+    List<Project> selectGroupByVersionid();
+
+    List<Project> selectVersionById(@Param("id") String id);
 }

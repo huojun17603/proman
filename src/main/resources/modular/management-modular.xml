@@ -7,8 +7,8 @@
  -->
 <modular name="运营管理平台" code="ICH-ADMIN" version="1.01b">
 
-    <catalog name="项目管理" code="admin-pro" sequence="0">
-        <menu name="项目中心" code="admin-pro-center-index" view="pro/userIndex" />
+    <catalog name="项目管理" code="admin-project" sequence="0">
+        <menu name="项目中心" code="admin-project-center-index" view="project/projectIndex" />
     </catalog>
     <catalog name="日志管理" code="admin-note" sequence="0">
         <menu name="我的日志" code="admin-note-my-index" view="note/userIndex" />

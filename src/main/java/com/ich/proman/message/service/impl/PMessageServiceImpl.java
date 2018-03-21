@@ -61,6 +61,16 @@ public class PMessageServiceImpl implements PMessageService {
     }
 
     @Override
+    public List<PMessage> findAllList() {
+        return null;
+    }
+
+    @Override
+    public List<PMessage> findUnreadList() {
+        return null;
+    }
+
+    @Override
     public HttpResponse findUnreadNum() {
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         Integer unreadNum = messageMapper.selectUnReadNum(employee.getEmployeeId());

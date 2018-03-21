@@ -14,5 +14,10 @@ public interface PMessageService {
 
     public HttpResponse editToConfirm(String id);
 
+    public List<PMessage> findAllList();
+
+    public List<PMessage> findUnreadList();
+
     public HttpResponse findUnreadNum();
+
 }
