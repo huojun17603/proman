@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ich.proman.project.mapper.ProPrototypeMapper" >
+
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProPrototype">
+        insert into pro_prototype(id,projectid,modularid,userid,username,createtime,title,img,groupid,groupstatus,iterationcauses,deletecauses)
+        values(#{id},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{img},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
+    </insert>
+
+    <update id="updateTitle">
+        update pro_prototype set title = #{title} where id = #{id}
+    </update>
     
+    <update id="updateToHis">
+        update pro_prototype set groupstatus = 2 where id = #{id}
+    </update>
+    
+    <update id="updateToDel">
+        update pro_prototype set groupstatus = 3,deletecauses=#{deletecauses} where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where id = #{id}
+    </select>
+
+    <select id="selectListByMid" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where modularid = #{modularid}
+    </select>
+
+    <select id="selectNormalListByMid" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where modularid = #{modularid} and groupstatus = 1
+    </select>
+    
+    <select id="selectCountNormalListByMid" resultType="Integer">
+        select count(*) from pro_prototype where modularid = #{modularid} and groupstatus = 1
+    </select>
+
+    <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where groupid = #{id} and id != #{id}
+    </select>
+
 </mapper>

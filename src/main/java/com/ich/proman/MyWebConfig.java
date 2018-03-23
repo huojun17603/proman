@@ -27,10 +27,10 @@ import java.util.List;
 @ComponentScan({"com.ich.*.service"})
 public class MyWebConfig extends WebMvcConfigurerAdapter {
 
-    @Bean
-    public SystemConfigListener getSystemConfigListener(){
-        return new SystemConfigListener();
-    }
+//    @Bean
+//    public SystemConfigListener getSystemConfigListener(){
+//        return new SystemConfigListener();
+//    }
 
     @Bean
     public EmployeeSessionListener getEmployeeSessionListener(){

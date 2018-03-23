@@ -7,11 +7,17 @@
  -->
 <modular name="运营管理平台" code="ICH-ADMIN" version="1.01b">
 
-    <catalog name="项目管理" code="admin-project" sequence="0">
+    <catalog name="用户中心" code="admin-center" sequence="0">
+        <menu name="我的信息" code="admin-center-message-index" view="center/messageIndex" />
+        <menu name="我的日志" code="admin-center-note-index" view="center/noteIndex" />
+        <menu name="我的任务" code="admin-center-task-index" view="center/taskndex" />
+    </catalog>
+
+    <catalog name="项目管理" code="admin-project" sequence="1">
         <menu name="项目中心" code="admin-project-center-index" view="project/projectIndex" />
     </catalog>
-    <catalog name="日志管理" code="admin-note" sequence="0">
-        <menu name="我的日志" code="admin-note-my-index" view="note/userIndex" />
+
+    <catalog name="日志管理" code="admin-note" sequence="2">
         <menu name="日志中心" code="admin-note-center-index" view="note/noteIndex" />
     </catalog>
 	

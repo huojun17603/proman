@@ -18,9 +18,10 @@ public class ProPrototypeTag {
     private String mapx;
 
     private String mapy;
+    /** 编号*/
+    private String code;
     /** 长度2000以内 */
     private String content;
-
     /** 创建人ID */
     private String userid;
     /** 创建人 */
@@ -35,4 +36,107 @@ public class ProPrototypeTag {
     private String iterationcauses;
     /** 删除理由 */
     private String deletecauses;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getPrototypeid() {
+        return prototypeid;
+    }
+
+    public void setPrototypeid(String prototypeid) {
+        this.prototypeid = prototypeid;
+    }
+
+    public String getMapx() {
+        return mapx;
+    }
+
+    public void setMapx(String mapx) {
+        this.mapx = mapx;
+    }
+
+    public String getMapy() {
+        return mapy;
+    }
+
+    public void setMapy(String mapy) {
+        this.mapy = mapy;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
+    }
+
+    public Integer getGroupstatus() {
+        return groupstatus;
+    }
+
+    public void setGroupstatus(Integer groupstatus) {
+        this.groupstatus = groupstatus;
+    }
+
+    public String getIterationcauses() {
+        return iterationcauses;
+    }
+
+    public void setIterationcauses(String iterationcauses) {
+        this.iterationcauses = iterationcauses;
+    }
+
+    public String getDeletecauses() {
+        return deletecauses;
+    }
+
+    public void setDeletecauses(String deletecauses) {
+        this.deletecauses = deletecauses;
+    }
 }

@@ -14,4 +14,6 @@ public interface ProRoleMapper {
     ProRole selectById(@Param("id") String id);
 
     List<ProRole> selectByProId(@Param("projectid") String projectid);
+
+    List<ProRole> selectByOnly(@Param("userid") String userid, @Param("role") Integer role);
 }

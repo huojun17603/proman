@@ -35,6 +35,8 @@ public class ProRoleServiceImpl implements ProRoleService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"这是一个无效的项目!");
         if(ObjectHelper.isEmpty(role.getUserid())||ObjectHelper.isEmpty(role.getUsername())) return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择参与人员!");
         if(ObjectHelper.isEmpty(role.getRole())) return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择对应角色!");
+        List<ProRole> list = roleMapper.selectByOnly(role.getUserid(),role.getRole());
+        if(ObjectHelper.isNotEmpty(list)) return new HttpResponse(HttpResponse.HTTP_ERROR,"此员工已担任当前职位!");
         role.setId(IDUtils.createUUId());
         roleMapper.insert(role);
         List<ProRole> roles = findProRole(project.getId());

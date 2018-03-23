@@ -62,12 +62,14 @@ public class PMessageServiceImpl implements PMessageService {
 
     @Override
     public List<PMessage> findAllList() {
-        return null;
+        LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
+        return messageMapper.selectAllList(employee.getEmployeeId());
     }
 
     @Override
     public List<PMessage> findUnreadList() {
-        return null;
+        LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
+        return messageMapper.selectUnreadList(employee.getEmployeeId());
     }
 
     @Override

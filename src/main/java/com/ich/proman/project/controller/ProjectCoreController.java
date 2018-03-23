@@ -3,6 +3,7 @@ package com.ich.proman.project.controller;
 import com.ich.core.http.entity.HttpResponse;
 import com.ich.module.annotation.Link;
 import com.ich.proman.base.PromanController;
+import com.ich.proman.project.pojo.ProModular;
 import com.ich.proman.project.pojo.Project;
 import com.ich.proman.project.service.ProjectCoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,10 @@ public class ProjectCoreController extends PromanController {
     public ModelAndView center(String id , String callback){
         String viewname = "project/projectCenter";
         Map<String,Object> model = new HashMap<>();
-        model.put("id",id);
+        Project project = projectCoreService.findById(id);
+        List<Map<String,Object>>  modulars = projectCoreService.findModularListByPid(id);
+        model.put("project",project);
+        model.put("modulars",modulars);
         return new ModelAndView(viewname,model);
     }
 

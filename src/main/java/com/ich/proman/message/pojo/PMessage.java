@@ -193,7 +193,46 @@ public class PMessage {
             if (PROJECT_MODULAR_DEL.equals(source)) {
                 result = "项目：" + args[0] + "（" + args[1] + "），删除模块："+ args[2];
             }
-            /*//*/
+            /*/项目：原型/*/
+            if (PROJECT_PROTOTYPE_ADD.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），新增原型："+ args[2];
+            }
+            if (PROJECT_PROTOTYPE_EDIT_TITLE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”修改名称为："+args[3];
+            }
+            if (PROJECT_PROTOTYPE_EDIT_IMG.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”已迭代！";
+            }
+            if (PROJECT_PROTOTYPE_DEL.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”被标记为删除！";
+            }
+            if (PROJECT_PROTOTYPE_TAG_ADD.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”新增标记：" + args[3];
+            }
+            if (PROJECT_PROTOTYPE_TAG_EDIT.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”标记“" + args[3] +"”已被修改！";
+            }
+            if (PROJECT_PROTOTYPE_TAG_IMPORT.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），原型“"+ args[2]+"”引入标记：" + args[3];
+            }
+            /*/项目：设计/*/
+
+            /*/项目：任务/*/
+
+            /*/项目：用例/*/
+
+            /*/项目：BUG/*/
+
+            /*/项目：文件/*/
+            if (PROJECT_FILE_CREATE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），新增文件："+ args[2];
+            }
+            if (PROJECT_FILE_ITE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），文件迭代："+ args[2];
+            }
+            if (PROJECT_FILE_DISABLE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），文件删除："+ args[2];
+            }
         }catch (Exception e){
             throw new CustomException(HttpResponse.HTTP_ERROR, "PMessage.findTemplate:args length error");
         }

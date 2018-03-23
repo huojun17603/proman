@@ -2,4 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ich.proman.project.mapper.ProFileMapper" >
     
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProFile">
+        insert into pro_file(id,projectid,modularid,source,sourceid,userid,username,createtime,filename,file,suffix,groupid,groupstatus,iterationcauses,deletecauses)
+        values(#{id},#{projectid},#{modularid},#{source},#{sourceid},#{userid},#{username},#{createtime},#{filename},#{file},#{suffix},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
+    </insert>
+
+    <update id="updateToHis">
+        update pro_file set groupstatus = 2 where id = #{id}
+    </update>
+
+    <update id="updateToDis">
+        update pro_file set groupstatus = 3, deletecauses = #{deletecauses} where id = #{id}
+    </update>
+
+    <select id="selectByName" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where projectid = #{projectid} and filename = #{filename}
+    </select>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where id =#{id}
+    </select>
+
+    <select id="selectListByMid" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where modularid = #{modularid}
+    </select>
+
+    <select id="selectNormalListByMid" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where modularid = #{modularid} and groupstatus = 1
+    </select>
+
+    <select id="selectCountNormalListByMid" resultType="Integer">
+        select count(*) from pro_file where modularid = #{modularid} and groupstatus = 1
+    </select>
+
+    <select id="selectNormalListByPid" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where projectid = #{projectid} and groupstatus = 1
+    </select>
+
+    <select id="selectCountNormalListByPid" resultType="Integer">
+        select count(*) from pro_file where projectid = #{projectid} and groupstatus = 1
+    </select>
+
+    <select id="selectNormalListBySource" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where projectid = #{projectid} and source=#{source} and sourceid=#{sourceid} and groupstatus = 1
+    </select>
+
+    <select id="selectCountNormalListBySource" resultType="com.ich.proman.project.pojo.ProFile">
+        select count(*) from pro_file where projectid = #{projectid} and source=#{source} and sourceid=#{sourceid} and groupstatus = 1
+    </select>
+
+    <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProFile">
+        select * from pro_file where groupid = #{id} and id != #{id}
+    </select>
 </mapper>

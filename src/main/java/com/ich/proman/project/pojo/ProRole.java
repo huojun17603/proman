@@ -10,14 +10,36 @@ public class ProRole {
     /** 项目经理 */
     public static Integer PROJECT_MANAGER = 1;
     /** 原型设计 */
-    public static Integer PROJECT_PROTOTYPE_MANAGER = 1;
+    public static Integer PROJECT_PROTOTYPE_MANAGER = 2;
     /** 美工 */
-    public static Integer PROJECT_ART_MANAGER = 1;
-    /** 开发人员 */
-    public static Integer PROJECT_DEVELOP_MANAGER = 1;
+    public static Integer PROJECT_ART_MANAGER = 3;
+    /** JAVA开发 */
+    public static Integer PROJECT_JAVA_MANAGER = 4;
+    /** IOS开发 */
+    public static Integer PROJECT_IOS_MANAGER = 5;
+    /** 安卓开发 */
+    public static Integer PROJECT_ANDRIOD_MANAGER = 6;
 
     public static String FINDROLENAME(Integer role) {
-        return  "";
+        if(PROJECT_MANAGER.equals(role)){
+            return  "项目经理";
+        }
+        if(PROJECT_PROTOTYPE_MANAGER.equals(role)){
+            return  "原型设计";
+        }
+        if(PROJECT_ART_MANAGER.equals(role)){
+            return  "美工";
+        }
+        if(PROJECT_JAVA_MANAGER.equals(role)){
+            return  "JAVA开发";
+        }
+        if(PROJECT_IOS_MANAGER.equals(role)){
+            return  "IOS开发";
+        }
+        if(PROJECT_ANDRIOD_MANAGER.equals(role)){
+            return  "安卓开发";
+        }
+        return "";
     }
 
     /** 项目角色人员ID */

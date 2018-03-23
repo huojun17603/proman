@@ -9,6 +9,7 @@ import com.ich.proman.base.Constant;
 import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
 import com.ich.proman.project.mapper.ProjectCoreMapper;
+import com.ich.proman.project.pojo.ProModular;
 import com.ich.proman.project.pojo.ProRole;
 import com.ich.proman.project.pojo.Project;
 import com.ich.proman.project.service.ProModularService;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectCoreServiceImpl implements ProjectCoreService {
@@ -146,5 +148,15 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
     @Override
     public List<Project> findVersions(String id) {
         return projectCoreMapper.selectVersionById(id);
+    }
+
+    @Override
+    public Project findById(String id) {
+        return projectCoreMapper.selectById(id);
+    }
+
+    @Override
+    public List<Map<String,Object>> findModularListByPid(String id) {
+        return projectCoreMapper.selectModularListByPid(id);
     }
 }

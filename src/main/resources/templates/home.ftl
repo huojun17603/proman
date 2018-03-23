@@ -66,6 +66,7 @@
     <div id="home_tabs" class="easyui-tabs" data-options="fit:true,border:false,plain:true">
         <div title="首页">
             <div id="home_context" class="homeBox" style="width: 100%;">
+                <#include  "include/message.ftl">
             </div>
         </div>
     </div>

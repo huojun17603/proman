@@ -34,4 +34,100 @@ public class ProPrototype {
     private String iterationcauses;
     /** 删除理由 */
     private String deletecauses;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getProjectid() {
+        return projectid;
+    }
+
+    public void setProjectid(String projectid) {
+        this.projectid = projectid;
+    }
+
+    public String getModularid() {
+        return modularid;
+    }
+
+    public void setModularid(String modularid) {
+        this.modularid = modularid;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public Date getCreatetime() {
+        return createtime;
+    }
+
+    public void setCreatetime(Date createtime) {
+        this.createtime = createtime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public String getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
+    }
+
+    public Integer getGroupstatus() {
+        return groupstatus;
+    }
+
+    public void setGroupstatus(Integer groupstatus) {
+        this.groupstatus = groupstatus;
+    }
+
+    public String getIterationcauses() {
+        return iterationcauses;
+    }
+
+    public void setIterationcauses(String iterationcauses) {
+        this.iterationcauses = iterationcauses;
+    }
+
+    public String getDeletecauses() {
+        return deletecauses;
+    }
+
+    public void setDeletecauses(String deletecauses) {
+        this.deletecauses = deletecauses;
+    }
 }

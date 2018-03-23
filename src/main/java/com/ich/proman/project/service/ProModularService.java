@@ -3,6 +3,8 @@ package com.ich.proman.project.service;
 import com.ich.core.http.entity.HttpResponse;
 import com.ich.proman.project.pojo.ProRole;
 
+import java.util.Map;
+
 public interface ProModularService {
 
     /**
@@ -20,4 +22,5 @@ public interface ProModularService {
      */
     public HttpResponse deleteModular(String id);
 
+    Map<String,Object> findModularDetailById(String modularid);
 }

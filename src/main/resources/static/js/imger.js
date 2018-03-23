@@ -188,14 +188,14 @@ function OPEN_CROP_WIN(property){
 }
 
 function OPEN_LOAD_WIN(property){
-	ZXXFILE.fileInput = $("#uploadify").get(0);
+	ZXXFILE.fileInput = $("#"+property.uploadify).get(0);
 	ZXXFILE.url = property.url;
 	ZXXFILE.filter= function(files) {
 		var arrFiles = [];
 		for (var i = 0, file; file = files[i]; i++) {
 			if (file.type.indexOf("image") == 0) {
-				if (file.size >= 4096000) {
-					alert('您这张"'+ file.name +'"图片大小过大，应小于4M');	
+				if (file.size >= 10240000) {
+					alert('您这张"'+ file.name +'"图片大小过大，应小于10M');
 				} else {
 					arrFiles.push(file);
 				}			
@@ -243,8 +243,8 @@ function OPEN_LOAD_WIN(property){
 		ZXXFILE.init();
 		init_ZXXFILE = !init_ZXXFILE;
 	}
-	$('#uploadify').val("");
-	$('#uploadify').click();
+    $("#"+property.uploadify).val("");
+    $("#"+property.uploadify).click();
 }
 
 function preview_crop(obj) {  

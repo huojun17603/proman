@@ -19,4 +19,12 @@
         select count(*) from pro_message where userid = #{userid} and status = 0
     </select>
 
+    <select id="selectUnreadList" parameterType="String" resultType="com.ich.proman.message.pojo.PMessage">
+        select * from pro_message where userid = #{userid} and status = 0 order by createtime desc
+    </select>
+
+    <select id="selectAllList" parameterType="String" resultType="com.ich.proman.message.pojo.PMessage">
+        select * from pro_message where userid = #{userid} order by createtime desc
+    </select>
+
 </mapper>

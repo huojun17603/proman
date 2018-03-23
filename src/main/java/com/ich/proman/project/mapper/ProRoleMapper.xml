@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ich.proman.project.mapper.ProRoleMapper" >
 
-    <insert id="pro_role" parameterType="com.ich.proman.project.pojo.ProRole">
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProRole">
         insert into pro_role(id,projectid,userid,username,role)
         values(#{id},#{projectid},#{userid},#{username},#{role})
     </insert>
@@ -17,6 +17,10 @@
 
     <select id="selectByProId" resultType="com.ich.proman.project.pojo.ProRole">
         select * from pro_role where projectid = #{projectid}
+    </select>
+
+    <select id="selectByOnly" resultType="com.ich.proman.project.pojo.ProRole">
+        select * from pro_role where userid = #{userid}
     </select>
 
 </mapper>

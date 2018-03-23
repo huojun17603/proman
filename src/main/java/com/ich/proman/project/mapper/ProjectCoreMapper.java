@@ -4,6 +4,7 @@ import com.ich.proman.project.pojo.Project;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectCoreMapper {
 
@@ -24,4 +25,6 @@ public interface ProjectCoreMapper {
     List<Project> selectGroupByVersionid();
 
     List<Project> selectVersionById(@Param("id") String id);
+
+    List<Map<String,Object>> selectModularListByPid(@Param("id") String id);
 }
