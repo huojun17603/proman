@@ -21,11 +21,11 @@
         <menu name="日志中心" code="admin-note-center-index" view="note/noteIndex" />
     </catalog>
 	
-    <catalog name="系统配置" code="admin-system" sequence="99">
+<!--    <catalog name="系统配置" code="admin-system" sequence="99">
         <menu name="系统参数" code="admin-system-config-index" view="system/configIndex" />
         <menu name="系统版本管理" code="admin-system-versionapp" view="system/versionappIndex" />
         <menu name="公共类目管理" code="admin-system-category" view="system/categoryIndex" />
-    </catalog>
+    </catalog>-->
 
     <catalog name="员工账户管理" code="admin-employee" sequence="98">
         <menu name="员工管理" code="admin-employee-index" view="employee/employeeIndex" />

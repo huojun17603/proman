@@ -28,7 +28,7 @@
     </select>
 
     <select id="selectNormalListByMid" resultType="com.ich.proman.project.pojo.ProPrototype">
-        select * from pro_prototype where modularid = #{modularid} and groupstatus = 1
+        select * from pro_prototype where modularid = #{modularid} and groupstatus = 1 order by createtime desc
     </select>
     
     <select id="selectCountNormalListByMid" resultType="Integer">
@@ -36,7 +36,7 @@
     </select>
 
     <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProPrototype">
-        select * from pro_prototype where groupid = #{id} and id != #{id}
+        select * from pro_prototype where groupid = #{id} order by createtime desc
     </select>
 
 </mapper>

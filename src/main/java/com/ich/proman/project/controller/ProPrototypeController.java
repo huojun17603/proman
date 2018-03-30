@@ -1,6 +1,7 @@
 package com.ich.proman.project.controller;
 
 import com.ich.core.base.JsonUtils;
+import com.ich.core.base.ObjectHelper;
 import com.ich.core.http.entity.HttpEasyUIResponse;
 import com.ich.core.http.entity.HttpResponse;
 import com.ich.module.annotation.Link;
@@ -59,8 +60,9 @@ public class ProPrototypeController  extends PromanController {
     @RequestMapping("project/prototype/edit/img")
     @ResponseBody
     @Link(name = "原型-项目原型迭代",code = "admin-project-prototype-edit-img",parent = "admin-project-center-index", level = Link.LEVEL_NONE)
-    public String prototypeEditImg(String id,String img,String iterationcauses,String callback){
-        HttpResponse response = prototypeService.editPrototypeToImg(id,img,iterationcauses);
+    public String prototypeEditImg(String id,String img,String iterationcauses,Boolean imports, String callback){
+        if(ObjectHelper.isEmpty(imports)) imports = false;
+        HttpResponse response = prototypeService.editPrototypeToImg(id,img,iterationcauses,imports);
         return callback(callback, response);
     }
 

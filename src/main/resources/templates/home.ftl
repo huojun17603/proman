@@ -23,23 +23,28 @@
 </head>
 <script type="text/javascript">
     var userMenuList = "/employeeMenus";
+    function openSocketWin(){
+        $('#socket_window').window('open');
+        $('#socket_window').window('center');
+    }
 </script>
 <script type="text/javascript" src="/static/js/index.js"></script>
 <!-- 主框架最小尺寸1280*768。内框架最小尺寸1024*630 -->
 <body class="easyui-layout"  style="width:100%;height:100%;margin: 0 auto;min-height: 768px;min-width:1280px;">
-
+<#include "socket/socket.ftl">
 <div data-options="region:'north',split:false" style="height:60px;">
     <div id="header">
         <div class="headerNav">
             <a class="logo" href="javascript:void(0);">
                 <!-- LOGO：布局参数请自定义 -->
-                <img style="margin:5 20;max-width: 160px;" alt="LOGO" src="">
+               <#-- <img style="margin:5 20;max-width: 160px;" alt="LOGO" src="">-->
             </a>
             <div style="float:left;height: 100%;vertical-align: middle;">
                 <p style="line-height:1px;font-size:16px;color: #FF8C69;font-family:'微软雅黑'"></p>
                 <p style="color:#999;"></p>
             </div>
             <ul class="nav">
+                <li><a href="javascript:void(0)" onclick="openSocketWin()">消息</a></li>
                 <li><a href="javascript:void(0)" onclick="openEditWin()">修改密码</a></li>
                 <li><a href="/out" >安全退出</a></li>
             </ul>

@@ -1,8 +1,12 @@
 <script type="text/javascript">
-    var fileAddURL = "";
-    var fileHisURL = "";
-    var fileDelURL = "";
-    var fileUploadURL = "";
+    var fileAddURL = "project/file/add";
+    var fileEditURL = "project/file/edit";
+    var fileHisURL = "project/file/hislist";
+    var fileDelURL = "project/file/del";
+    var fileUploadURL = "file/upload";
+    var file_source = {
+
+    }
     $(function () {
         $("#file_datagrid").datagrid({
             border:false,
@@ -13,10 +17,11 @@
             rownumbers:true,//序号
             singleSelect:true,//单选
             columns:[[
-                {field:'createtime',title:'上传时间',align:"center",width:150},
-                {field:'filename',title:'文件名称',align:"center",width:350},
+                {field:'createtime',title:'上传时间',align:"center",width:150,formatter:formatterTime},
+                {field:'filename',title:'文件名称',align:"center",width:250},
                 {field:'username',title:'上传人员',align:"center",width:150},
-                {field:'source',title:'文件来源',align:"center",width:150}
+                {field:'source',title:'文件来源',align:"center",width:250,formatter:initSource},
+                {field:'iterationcauses',title:'替换说明',align:"center",width:300,formatter:initVersionMsg}
             ]],
             toolbar:'#file_tool'
         });
@@ -29,29 +34,48 @@
             rownumbers:true,//序号
             singleSelect:true,//单选
             columns:[[
-                {field:'createtime',title:'上传时间',align:"center",width:150},
-                {field:'filename',title:'文件名称',align:"center",width:350},
+                {field:'createtime',title:'上传时间',align:"center",width:150,formatter:formatterTime},
+                {field:'filename',title:'文件名称',align:"center",width:250},
                 {field:'username',title:'上传人员',align:"center",width:150},
-                {field:'source',title:'文件来源',align:"center",width:150},
-                {field:'id',title:'操作',align:"center",width:150}
-            ]]
+                {field:'source',title:'文件来源',align:"center",width:250,formatter:initSource},
+                {field:'groupstatus',title:'状态',align:"center",width:100,formatter:initVersion},
+                {field:'groupid',title:'说明',align:"center",width:350,formatter:initVersionMsg}
+            ]],
+            toolbar:'#file_his_tool'
         });
     })
-    function downFile() {
-        var row = $('#file_window').datagrid('getSelected');
+    function downFile(obj) {
+        var row = $('#'+obj+'_datagrid').datagrid('getSelected');
         if(isEmpty(row)){
             $.messager.alert("提示框","请选择一条数据记录！");
             return;
         }
-        window.open(row.file);
+        window.open(row.file+"?downloadName="+row.filename);
     }
-    function openOWindow(){
-        alert();
+    function openOFileWindow(obj){
+        var row = $('#'+obj+'_datagrid').datagrid('getSelected');
+        if(isEmpty(row)){
+            $.messager.alert("提示框","请选择一条数据记录！");
+            return;
+        }
+        var i = row.file.lastIndexOf('.');
+        var suffix = row.file.substring(i);
+        if(suffix!=".doc"){
+            $.messager.alert("提示框","目前只支持DOC格式的Word文档在线查看功能！");
+            return;
+        }
+        var href = row.file.substring(0,i) + "/office.html";
+        window.open(href);
     }
     function openAddFileWindow(){
         $('#file_add_window').window('open');
         $('#file_add_window').window('center');
         $("#file_add_form").form("clear");
+        $("#file_add_projectid").val(file_source.projectid);
+        $("#file_add_modularid").val(file_source.modularid);
+        $("#file_add_source").val(file_source.source);
+        $("#file_add_sourceid").val(file_source.sourceid);
+        $("#file_add_sourceremark").val(file_source.sourceremark);
     }
     function addFile(){
         $.ajax({
@@ -89,7 +113,7 @@
 
     function editFile(){
         $.ajax({
-            url:basePath + fileAddURL,
+            url:basePath + fileEditURL,
             data:$("#file_edit_form").serialize(),
             success: function (data){
                 if(data.status==0){
@@ -148,8 +172,24 @@
         $('#file_his_window').window('open');
         $('#file_his_window').window('center');
         $("#file_his_datagrid").datagrid({
-            url:basePath + fileHisURL + "?id=" + row.id
+            url:basePath + fileHisURL + "?id=" + row.groupid
         });
+    }
+
+    function file_load(obj){
+        var params = {
+            uploadify:"file_"+obj+"_uploadify",
+            url: basePath + fileUploadURL ,
+            previews:false,
+            crop:false,
+            callUpload:function(file, response) {
+                var json = eval('(' + response + ')');
+                $("#file_"+obj+"_suffix").val(json.data[0].ext);
+                $("#file_"+obj+"_filename").val(json.data[0].oldname);
+                $("#file_"+obj+"_file").val(json.data[0].url);
+            }
+        }
+        $.UPLOAD_IMG(params);
     }
 </script>
 <div id="file_window" class="easyui-window" title="项目文件管理"
@@ -158,8 +198,8 @@
     <table id="file_datagrid" style="height:565px;"></table>
     <div id="file_tool" style="padding:0px;height:auto;overflow: hidden;">
         <div class="sgtz_atn">
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="downFile()">下载</a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="openOWindow()">打开</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="downFile('file')">下载</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="openOFileWindow('file')">打开</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="openAddFileWindow()">新增</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="openEditFileWindow()">替换</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="delFile()">删除</a>
@@ -170,24 +210,36 @@
 
 <div id="file_his_window" class="easyui-window" title="历史文件管理"
      data-options="modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,closed:true"
-     style="width:1000px;height:630px;">
+     style="width:800px;height:630px;">
     <table id="file_his_datagrid" style="height:565px;"></table>
+    <div id="file_his_tool" style="padding:0px;height:auto;overflow: hidden;">
+        <div class="sgtz_atn">
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="downFile('file_his')">下载</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="openOFileWindow('file_his')">打开</a>
+        </div>
+    </div>
 </div>
 
 <div id="file_add_window" class="easyui-window" title="新增文件"
      data-options="modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,closed:true"
-     style="width:1000px;height:630px;">
+     style="width:400px;height:250px;">
+    <input id="file_add_uploadify" name="file" type="file" style="display: none"/>
     <form id="file_add_form">
         <input id="file_add_projectid" name="projectid" type="hidden">
         <input id="file_add_modularid" name="modularid" type="hidden">
+        <input id="file_add_source" name="source" type="hidden">
+        <input id="file_add_sourceid" name="sourceid" type="hidden">
+        <input id="file_add_sourceremark" name="sourceremark" type="hidden">
         <ul class="fm_s" style="overflow: inherit;">
             <li class="fm_1l">
                 <label>文件名称：</label>
-                <input name="filename" class="easyui-combobox vipt" data-options="required:true">
+                <input id="file_add_filename" name="filename"  class="easyui-validatebox textbox vipt" readonly="readonly">
             </li>
             <li class="fm_1l">
                 <label>文件上传：</label>
-                <input name="filename" class="easyui-numberbox textbox vipt" data-options="min:0,precision:0">
+                <input id="file_add_file" name="file" type="hidden">
+                <input id="file_add_suffix" name="suffix" type="hidden">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="file_load('add')">上传文件</a>
             </li>
             <li class="fm_1l" style="text-align: center;padding-top: 20px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"  style="width:100px"  onclick="addFile()">确认</a>
@@ -199,17 +251,24 @@
 
 <div id="file_edit_window" class="easyui-window" title="迭代文件"
      data-options="modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,closed:true"
-     style="width:1000px;height:630px;">
+     style="width:500px;height:350px;">
+    <input id="file_edit_uploadify" name="file" type="file" style="display: none"/>
     <form id="file_edit_form">
         <input id="file_edit_id" name="id" type="hidden">
         <ul class="fm_s" style="overflow: inherit;">
             <li class="fm_1l">
                 <label>文件名称：</label>
-                <input name="filename" class="easyui-combobox vipt" disabled="disabled">
+                <input id="file_edit_filename" name="filename"  class="easyui-validatebox textbox vipt"  disabled="disabled">
             </li>
             <li class="fm_1l">
                 <label>文件上传：</label>
-                <input name="filename" class="easyui-numberbox textbox vipt" data-options="min:0,precision:0">
+                <input id="file_edit_file" name="file" type="hidden">
+                <input id="file_edit_suffix" name="suffix" type="hidden">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="file_load('edit')">上传文件</a>
+            </li>
+            <li class="fm_1l">
+                <label>变更说明：</label>
+                <input name="iterationcauses" class="easyui-textbox"  multiline="true" labelPosition="top" style="width:70%;height:60px">
             </li>
             <li class="fm_1l" style="text-align: center;padding-top: 20px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"  style="width:100px"  onclick="editFile()">确认</a>

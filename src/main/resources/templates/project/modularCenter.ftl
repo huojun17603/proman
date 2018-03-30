@@ -35,16 +35,29 @@
               }
           });
       }
-
+      var fileURL = "project/file/listbym";
+      function openFileWindow(){
+          $('#file_window').window('open');
+          $('#file_window').window('center');
+          $("#file_datagrid").datagrid({
+              url:basePath + fileURL + "?modularid=" + modular_id
+          });
+          file_source.projectid = project_id;
+          file_source.modularid = modular_id;
+          file_source.source = "2";
+          file_source.sourceremark = "${modular.modularname}";
+          file_source.sourceid = modular_id;
+      }
   </script>
   <body>
+  <#include "file_modular.ftl">
   <div class="homeDivBox">
       <div class="homeDivBorder">
           <div class="homeDivHead">
               <div>
                   <span class="htl">${modular.modularname}<#if modular.isdefault>（默认）</#if></span>
-                  <#if !modular.isdefault><a onclick="delModular()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >删除</a></#if>
                   <a onclick="gotoProject()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >返回项目</a>
+                  <#if !modular.isdefault><a onclick="delModular()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >删除</a></#if>
               </div>
           </div>
 
@@ -56,7 +69,7 @@
       function openPrototypeModular(){
           $('#prototype_window').window('open');
           $('#prototype_window').window('center');
-          $('#role_datalist').datalist({
+          $('#prototype_datalist').datalist({
               url:basePath + prototypeListURL + "?modularid=" + modular_id
           });
       }
@@ -117,7 +130,7 @@
           <div class="homeDivHead">
               <div>
                   <span class="htl">文件（${modular.filenum}）</span>
-                  <a onclick=""  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >列表</a>
+                  <a onclick="openFileWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >列表</a>
               </div>
           </div>
       </div>

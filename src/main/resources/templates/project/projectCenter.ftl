@@ -92,15 +92,18 @@
         function exeversion(){
             alert("等待开发!");
         }
-        var fileURL = "";
-        var source = "";
-        var sourceid = "";
+        var fileURL = "project/file/listbyp";
         function openFileWindow(){
             $('#file_window').window('open');
             $('#file_window').window('center');
             $("#file_datagrid").datagrid({
                 url:basePath + fileURL + "?projectid=" + project_id
             });
+            file_source.projectid = "${project.id}";
+            file_source.modularid = "";
+            file_source.source = "1";
+            file_source.sourceremark = "${project.title}:${project.version}";
+            file_source.sourceid = "${project.id}";
         }
         var roleURL = "project/role/list";
         function openRoleWindow(){

@@ -9,8 +9,8 @@ import java.util.Date;
  * 删除：允许创建者标记历史版本为删除状态，但必须说明删除原因（目的：仅保留有价值的版本给团队浏览）
  */
 public class ProFile {
-    //项目、模块、原型、测试、设计
 
+    //项目、模块、原型、测试、设计
     private String id;
 
     private String projectid;
@@ -20,18 +20,18 @@ public class ProFile {
     private String source;
 
     private String sourceid;
-
+    /** 来源说明*/
+    private String sourceremark;
     /** 创建人ID */
     private String userid;
     /** 创建人 */
     private String username;
 
-    private String name;
     /** 文件后缀；主要用于区别是否可以在页面打开 */
     private String suffix;
-
+    /** 文件原名称*/
     private String filename;
-
+    /** 文件路径 */
     private String file;
 
     /** 分组ID，如果是新建则同本记录ID一致，如果是替代则和被替代记录的分组ID一致 */
@@ -101,14 +101,6 @@ public class ProFile {
         this.username = username;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSuffix() {
         return suffix;
     }
@@ -171,5 +163,13 @@ public class ProFile {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public String getSourceremark() {
+        return sourceremark;
+    }
+
+    public void setSourceremark(String sourceremark) {
+        this.sourceremark = sourceremark;
     }
 }

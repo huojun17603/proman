@@ -13,7 +13,7 @@ public interface ProPrototypeService {
     HttpResponse editPrototypeTitle(String id,String title);
 
     /** 一条新的原型记录（理由），原有记录标记为历史，使用全新的标记信息 */
-    HttpResponse editPrototypeToImg(String id,String img,String iterationcauses);
+    HttpResponse editPrototypeToImg(String id,String img,String iterationcauses,Boolean imports);
 
     /** 允许创建者标记版本为删除状态，但必须说明删除原因（目的：仅保留有价值的版本给团队浏览） */
     HttpResponse editPrototypeToDel(String id,String deletecauses);

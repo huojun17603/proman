@@ -11,8 +11,10 @@ import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
 import com.ich.proman.project.mapper.ProModularMapper;
 import com.ich.proman.project.mapper.ProPrototypeMapper;
+import com.ich.proman.project.mapper.ProPrototypeTagMapper;
 import com.ich.proman.project.mapper.ProjectCoreMapper;
 import com.ich.proman.project.pojo.ProPrototype;
+import com.ich.proman.project.pojo.ProPrototypeTag;
 import com.ich.proman.project.pojo.ProRole;
 import com.ich.proman.project.pojo.Project;
 import com.ich.proman.project.service.ProPrototypeService;
@@ -28,6 +30,8 @@ public class ProPrototypeServiceImpl implements ProPrototypeService {
 
     @Autowired
     private ProPrototypeMapper prototypeMapper;
+    @Autowired
+    private ProPrototypeTagMapper prototypeTagMapper;
     @Autowired
     private ProjectCoreMapper projectCoreMapper;
     @Autowired
@@ -74,21 +78,24 @@ public class ProPrototypeServiceImpl implements ProPrototypeService {
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),title};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_EDIT_TITLE,message_args),PMessage.PROJECT_PROTOTYPE_EDIT_TITLE,prototype.getId());
         }
-        return null;
+        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
     @Override
-    public HttpResponse editPrototypeToImg(String id, String img, String iterationcauses) {
+    public HttpResponse editPrototypeToImg(String id, String img, String iterationcauses,Boolean imports) {
         ProPrototype oprototype = prototypeMapper.selectById(id);
         if(ObjectHelper.isEmpty(oprototype.getProjectid())) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         Project project = projectCoreMapper.selectById(oprototype.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
+        if(ObjectHelper.isEmpty(img))return new HttpResponse(HttpResponse.HTTP_ERROR,"请上传原型图！");
         prototypeMapper.updateToHis(id);
         ProPrototype prototype = new ProPrototype();
         Date day = new Date();
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         prototype.setId(IDUtils.createUUId());
         prototype.setTitle(oprototype.getTitle());
+        prototype.setProjectid(oprototype.getProjectid());
+        prototype.setModularid(oprototype.getModularid());
         prototype.setImg(img);
         prototype.setUserid(employee.getEmployeeId());
         prototype.setUsername(employee.getEmployeeName());
@@ -97,6 +104,23 @@ public class ProPrototypeServiceImpl implements ProPrototypeService {
         prototype.setGroupstatus(Constant.STATUS_NORMAL);
         prototype.setIterationcauses(iterationcauses);
         prototypeMapper.insert(prototype);
+        //引入
+        List<ProPrototypeTag> tagss = this.prototypeTagMapper.selectNormalListByPid(oprototype.getId());
+        for(ProPrototypeTag tag : tagss){
+            List<ProPrototypeTag> tags = prototypeTagMapper.selectVersions(tag.getGroupid());//被选中的标记的历史标记列表
+            tag.setId(IDUtils.createUUId());
+            tag.setPrototypeid(prototype.getId());
+            tag.setGroupid(tag.getId());
+            this.prototypeTagMapper.insert(tag);
+            for(ProPrototypeTag obj : tags){
+                if(!tag.getCode().equals(obj.getCode())) {
+                    obj.setId(IDUtils.createUUId());
+                    obj.setPrototypeid(prototype.getId());
+                    obj.setGroupid(tag.getId());
+                    this.prototypeTagMapper.insert(obj);
+                }
+            }
+        }
         List<ProRole> roles = roleService.findProRole(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle()};

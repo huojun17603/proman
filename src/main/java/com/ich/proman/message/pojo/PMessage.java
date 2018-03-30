@@ -135,7 +135,18 @@ public class PMessage {
 
     /** 设计 500*/
 
-    /** 任务 600*/
+    /** 任务:新增*/
+    public static Integer PROJECT_TASK_ADD = 600;
+    /** 任务:修改*/
+    public static Integer PROJECT_TASK_EDIT = 601;
+    /** 任务:删除*/
+    public static Integer PROJECT_TASK_DEL = 602;
+    /** 任务:领取*/
+    public static Integer PROJECT_TASK_RECEIVE = 603;
+    /** 任务:完成*/
+    public static Integer PROJECT_TASK_COMPLETE = 604;
+    /** 任务:指派*/
+    public static Integer PROJECT_TASK_APPOINT = 605;
 
     /** 用例 ：好像没有通知的必要*/
 
@@ -218,7 +229,24 @@ public class PMessage {
             /*/项目：设计/*/
 
             /*/项目：任务/*/
-
+            if (PROJECT_TASK_ADD.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），新增任务："+ args[2] + "（"+ args[3] +"）";
+            }
+            if (PROJECT_TASK_EDIT.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），任务《"+ args[2] + "（"+ args[3] +"）"+"》已被修改！";
+            }
+            if (PROJECT_TASK_DEL.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），任务《"+ args[2] + "（"+ args[3] +"）"+"》已被废弃！";
+            }
+            if (PROJECT_TASK_RECEIVE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），任务《"+ args[2] + "（"+ args[3] +"）"+"》已被"+ args[4]+"领取！";
+            }
+            if (PROJECT_TASK_COMPLETE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），任务《"+ args[2] + "（"+ args[3] +"）"+"》已被"+ args[4]+"完成！";
+            }
+            if (PROJECT_TASK_APPOINT.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），任务《"+ args[2] + "（"+ args[3] +"）"+"》已被指派给"+ args[4];
+            }
             /*/项目：用例/*/
 
             /*/项目：BUG/*/

@@ -86,6 +86,52 @@
     function CLOSE_MESSAGER_PROGRESS(){
         $.messager.progress('close');
     }
+    var source_data = [{id:"1",text:"项目"},{id:"2",text:"模块"},
+        {id:"3",text:"原型"},{id:"4",text:"设计"},{id:"5",text:"任务"},{id:"6",text:"用例"},{id:"7",text:"BUG"}];
+
+    function initSource(value,row,index) {
+        if(value==1) {
+            return "项目：" + row.sourceremark;
+        } else if(value==2) {
+            return "模块：" + row.sourceremark;
+        } else if(value==3) {
+            return "原型：" + row.sourceremark;
+        } else if(value==4) {
+            return "设计：" + row.sourceremark;
+        } else if(value==5) {
+            return "任务：" + row.sourceremark;
+        } else if(value==6) {
+            return "用例：" + row.sourceremark;
+        } else {
+            return "BUG：" + row.sourceremark;
+        }
+    }
+    
+    function initVersion(value,row,index){
+        if(value==1) {
+            return "当前版本"
+        } else if(value==2) {
+            return "历史版本"
+        } else if(value==3) {
+            return "废弃版本"
+        } else {
+            return "未知"
+        }
+    }
+    function initVersionMsg(value,row,index){
+        if(row.groupstatus==1) {
+            if(!isEmpty(row.iterationcauses))
+                return "<span title='"+row.iterationcauses+"'>"+row.iterationcauses+"</span>"
+        } else if(row.groupstatus==2) {
+            if(!isEmpty(row.iterationcauses))
+                return "<span title='"+row.iterationcauses+"'>"+row.iterationcauses+"</span>"
+        } else if(row.groupstatus==3) {
+            if(!isEmpty(row.deletecauses))
+                return "<span title='"+row.deletecauses+"'>"+row.deletecauses+"</span>"
+        }
+        return ""
+
+    }
 </script>
 <style>
     .vipt{

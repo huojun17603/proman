@@ -3,8 +3,8 @@
 <mapper namespace="com.ich.proman.project.mapper.ProFileMapper" >
     
     <insert id="insert" parameterType="com.ich.proman.project.pojo.ProFile">
-        insert into pro_file(id,projectid,modularid,source,sourceid,userid,username,createtime,filename,file,suffix,groupid,groupstatus,iterationcauses,deletecauses)
-        values(#{id},#{projectid},#{modularid},#{source},#{sourceid},#{userid},#{username},#{createtime},#{filename},#{file},#{suffix},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
+        insert into pro_file(id,projectid,modularid,source,sourceid,sourceremark,userid,username,createtime,filename,file,suffix,groupid,groupstatus,iterationcauses,deletecauses)
+        values(#{id},#{projectid},#{modularid},#{source},#{sourceid},#{sourceremark},#{userid},#{username},#{createtime},#{filename},#{file},#{suffix},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
     </insert>
 
     <update id="updateToHis">
@@ -28,7 +28,7 @@
     </select>
 
     <select id="selectNormalListByMid" resultType="com.ich.proman.project.pojo.ProFile">
-        select * from pro_file where modularid = #{modularid} and groupstatus = 1
+        select * from pro_file where modularid = #{modularid} and groupstatus = 1 order by createtime desc
     </select>
 
     <select id="selectCountNormalListByMid" resultType="Integer">
@@ -36,7 +36,7 @@
     </select>
 
     <select id="selectNormalListByPid" resultType="com.ich.proman.project.pojo.ProFile">
-        select * from pro_file where projectid = #{projectid} and groupstatus = 1
+        select * from pro_file where projectid = #{projectid} and groupstatus = 1 order by createtime desc
     </select>
 
     <select id="selectCountNormalListByPid" resultType="Integer">
@@ -44,7 +44,7 @@
     </select>
 
     <select id="selectNormalListBySource" resultType="com.ich.proman.project.pojo.ProFile">
-        select * from pro_file where projectid = #{projectid} and source=#{source} and sourceid=#{sourceid} and groupstatus = 1
+        select * from pro_file where projectid = #{projectid} and source=#{source} and sourceid=#{sourceid} and groupstatus = 1 order by createtime desc
     </select>
 
     <select id="selectCountNormalListBySource" resultType="com.ich.proman.project.pojo.ProFile">
@@ -52,6 +52,6 @@
     </select>
 
     <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProFile">
-        select * from pro_file where groupid = #{id} and id != #{id}
+        select * from pro_file where groupid = #{id} order by createtime desc
     </select>
 </mapper>

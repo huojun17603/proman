@@ -28,6 +28,6 @@
     </select>
 
     <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProPrototypeTag">
-        select * from pro_prototype_tag where groupid = #{id} and id != #{id}
+        select * from pro_prototype_tag where groupid = #{id} order by createtime desc
     </select>
 </mapper>

@@ -26,10 +26,10 @@
     <select id="selectModularDetailById" resultType="map">
         select m.*,
             (select count(*) from pro_prototype where modularid = m.id and groupstatus = 1) as prototypenum,
-            (select count(*) from pro_task where modularid = m.id and groupstatus = 1) as tasknum,
-            (select count(*) from pro_test where modularid = m.id and groupstatus = 1) as testnum,
-            (select count(*) from pro_bug where modularid = m.id and groupstatus = 1) as bugnum,
-            (select count(*) from pro_design where modularid = m.id and groupstatus = 1) as designnum,
+            (select count(*) from pro_task where modularid = m.id) as tasknum,
+            (select count(*) from pro_test where modularid = m.id) as testnum,
+            (select count(*) from pro_bug where modularid = m.id) as bugnum,
+            (select count(*) from pro_design where modularid = m.id) as designnum,
             (select count(*) from pro_file where modularid = m.id and groupstatus = 1) as filenum
         from pro_modular m where m.id = #{id}
     </select>

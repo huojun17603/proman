@@ -32,7 +32,7 @@ public class LoginController extends PromanController {
         String sessionid = request.getSession().getId();
         HttpResponse response = this.adminLoginService.executeLogin(sessionid,logincode,loginkey);
         if(response.getStatus() == HttpResponse.HTTP_OK){
-            request.getSession().setAttribute(AdminController.SESSION_USERID, response.getData());
+            request.getSession().setAttribute("SESSION_USERID", response.getData());
             return callback(callback, JsonUtils.objectToJson(getSuccessMap(response)));
         }
         return callback(callback, JsonUtils.objectToJson(response));

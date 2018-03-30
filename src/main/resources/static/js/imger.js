@@ -191,19 +191,11 @@ function OPEN_LOAD_WIN(property){
 	ZXXFILE.fileInput = $("#"+property.uploadify).get(0);
 	ZXXFILE.url = property.url;
 	ZXXFILE.filter= function(files) {
-		var arrFiles = [];
-		for (var i = 0, file; file = files[i]; i++) {
-			if (file.type.indexOf("image") == 0) {
-				if (file.size >= 10240000) {
-					alert('您这张"'+ file.name +'"图片大小过大，应小于10M');
-				} else {
-					arrFiles.push(file);
-				}			
-			} else {
-				alert('文件"' + file.name + '"不是图片。');	
-			}
-		}
-		return arrFiles;
+        var arrFiles = [];
+        for (var i = 0, file; file = files[i]; i++) {
+			arrFiles.push(file);
+        }
+        return arrFiles;
 	}
 	ZXXFILE.onSelect = function(files) {
 		var html = '', i = 0;

@@ -2,4 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ich.proman.project.mapper.ProTaskMapper" >
     
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProTask">
+        insert into pro_task(id,code,projectid,modularid,userid,username,createtime,title,content,receivetime,completetime,receiveid,receivename,status)
+        values(#{id},#{code},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{content},#{receivetime},#{completetime},#{receiveid},#{receivename},#{status})
+    </insert>
+
+    <update id="delete" parameterType="String">
+        update pro_task set status = 4 where id = #{id}
+    </update>
+    
+    <update id="updateBase" parameterType="com.ich.proman.project.pojo.ProTask">
+        update pro_task set userid = #{userid},username = #{username},title = #{title},content = #{content} where id = #{id}
+    </update>
+
+    <update id="updateTaskToReceive">
+        update pro_task set receiveid = #{receiveid},receivename = #{receivename},receivetime = now() where id = #{id}
+    </update>
+
+    <update id="updateTaskToComplete">
+        update pro_task set completetime = now() where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProTask">
+        select * from pro_task where id = #{id}
+    </select>
+
+    <select id="selectByPCode" resultType="com.ich.proman.project.pojo.ProTask">
+        select * from pro_task where projectid = #{projectid} and code = #{code}
+    </select>
+
+    <select id="selectByMid" resultType="com.ich.proman.project.pojo.ProTask">
+        select * from pro_task where modularid = #{modularid}
+    </select>
+
+    <select id="selectListByQuery" resultType="map" parameterType="map">
+        select * from pro_task where 1 = 1
+        <if test="searchkey!=null"> and title like '%${title}%'</if>
+        <if test="projectid!=null"> and projectid = #{projectid}</if>
+        <if test="modularid!=null"> and modularid = #{modularid}</if>
+        <if test="userid!=null"> and userid = #{userid}</if>
+        <if test="status!=null"> and status = #{status}</if>
+    </select>
+
+    <select id="selectCountListByQuery" resultType="Integer" parameterType="map">
+        select count(*) from pro_task where 1 = 1
+        <if test="searchkey!=null"> and title like '%${title}%'</if>
+        <if test="projectid!=null"> and projectid = #{projectid}</if>
+        <if test="modularid!=null"> and modularid = #{modularid}</if>
+        <if test="userid!=null"> and userid = #{userid}</if>
+        <if test="status!=null"> and status = #{status}</if>
+    </select>
+
 </mapper>

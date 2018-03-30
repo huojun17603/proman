@@ -20,4 +20,8 @@ public interface ProPrototypeTagService {
 
     /** 获取历史版本 */
     public List<ProPrototypeTag> findVersions(String id);
+
+    HttpResponse addTagByImports(String prototypeid, String ids);
+
+    HttpResponse findById(String id);
 }

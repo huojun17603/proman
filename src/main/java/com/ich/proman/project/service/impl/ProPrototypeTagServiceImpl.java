@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
@@ -65,7 +67,9 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_ADD,message_args),PMessage.PROJECT_PROTOTYPE_TAG_ADD,tag.getId());
         }
-        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
+        Map<String,Object> data = new HashMap<>();
+        data.put("id",tag.getId());
+        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK,data);
     }
 
     @Override
@@ -143,5 +147,20 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
     @Override
     public List<ProPrototypeTag> findVersions(String id) {
         return prototypeTagMapper.selectVersions(id);
+    }
+
+    @Override
+    public HttpResponse addTagByImports(String prototypeid, String ids) {
+        String id_arr[]  = ids.split(",");
+        for (String id : id_arr){
+            addTagByImport(prototypeid,id);
+        }
+        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
+    }
+
+    @Override
+    public HttpResponse findById(String id) {
+        ProPrototypeTag tag = prototypeTagMapper.selectById(id);
+        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK,tag);
     }
 }

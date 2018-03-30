@@ -113,3 +113,7 @@ input{
     overflow: hidden;
 }
 
+.prototype_tag{
+    position: absolute;top: 0;left: 0;z-index: 100;width:40px;height:40px;background: url('/static/images/look.png');background-size: 100%
+}
+
