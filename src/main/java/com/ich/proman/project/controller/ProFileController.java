@@ -7,12 +7,16 @@ import com.ich.module.annotation.Link;
 import com.ich.proman.base.PromanController;
 import com.ich.proman.project.pojo.ProFile;
 import com.ich.proman.project.pojo.ProPrototype;
+import com.ich.proman.project.pojo.Project;
 import com.ich.proman.project.service.ProFileService;
+import com.ich.proman.project.service.ProjectCoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +25,19 @@ public class ProFileController extends PromanController {
 
     @Autowired
     private ProFileService fileService;
+    @Autowired
+    private ProjectCoreService projectCoreService;
+
+    @RequestMapping("project/file/center")
+    @Link(name = "文件-管理中心",code = "admin-project-file-center",parent = "admin-project-center-index", level = Link.LEVEL_NONE)
+    public ModelAndView center(String projectid, String callback){
+        String viewname = "project/fileCenter";
+        Project project = projectCoreService.findById(projectid);
+        Map<String,Object> model = new HashMap<>();
+        model.put("projectid",projectid);
+        model.put("project",project);
+        return new ModelAndView(viewname,model);
+    }
 
     @RequestMapping("project/file/add")
     @ResponseBody

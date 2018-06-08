@@ -20,6 +20,8 @@ public class ProPrototypeTag {
     private String mapy;
     /** 编号*/
     private String code;
+    /** 类型，1：注解标记；2：跳转标记：内容为跳转的原型ID*/
+    private Integer classes;
     /** 长度2000以内 */
     private String content;
     /** 创建人ID */
@@ -52,6 +54,15 @@ public class ProPrototypeTag {
     public void setCode(String code) {
         this.code = code;
     }
+
+    public Integer getClasses() {
+        return classes;
+    }
+
+    public void setClasses(Integer classes) {
+        this.classes = classes;
+    }
+
     public String getPrototypeid() {
         return prototypeid;
     }

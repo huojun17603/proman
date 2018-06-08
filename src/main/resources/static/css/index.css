@@ -114,6 +114,18 @@ input{
 }
 
 .prototype_tag{
-    position: absolute;top: 0;left: 0;z-index: 100;width:40px;height:40px;background: url('/static/images/look.png');background-size: 100%
+    position: absolute;top: 0;left: 0;z-index: 100;
 }
 
+.prototype_look{
+    float: left;width:40px;height:40px;background: url('/static/images/look.png');background-size: 100%;
+}
+.prototype_close{
+    float: left;width:40px;height:40px;background: url('/static/images/close.png');background-size: 100%;display: none;
+}
+.prototype_edit{
+    float: left;width:40px;height:40px;background: url('/static/images/edit.png');background-size: 100%;display: none;
+}
+.prototype_dw{
+    float: left;width:40px;height:40px;background: url('/static/images/dw.png');background-size: 100%;
+}

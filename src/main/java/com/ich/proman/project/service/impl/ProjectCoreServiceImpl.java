@@ -6,6 +6,7 @@ import com.ich.core.base.IDUtils;
 import com.ich.core.base.ObjectHelper;
 import com.ich.core.http.entity.HttpResponse;
 import com.ich.proman.base.Constant;
+import com.ich.proman.base.ProjectQuery;
 import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
 import com.ich.proman.project.mapper.ProjectCoreMapper;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,10 +55,6 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         project.setVersionid(project.getId());
         project.setStatus(Constant.STATUS_NORMAL);
         projectCoreMapper.insert(project);
-        /*/创建默认模块/*/
-        modularService.addModular(project.getId(),"首页",true);
-        modularService.addModular(project.getId(),"菜单",true);
-        modularService.addModular(project.getId(),"杂项",true);
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
@@ -67,7 +65,7 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!=Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         if(ObjectHelper.isEmpty(title)) return new HttpResponse(HttpResponse.HTTP_ERROR,"请填写项目名称！");
         projectCoreMapper.updateTitle(id,title);
-        List<ProRole> roles = roleService.findProRole(id);
+        List<ProRole> roles = roleService.findOnlyRoleByPid(id);
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),title};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_EDIT_NAME,message_args),PMessage.PROJECT_EDIT_NAME,id);
@@ -82,7 +80,7 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!=Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         if(ObjectHelper.isEmpty(deletecauses)) return new HttpResponse(HttpResponse.HTTP_ERROR,"请填写删除理由！");
         projectCoreMapper.updateProjectToDel(id,deletecauses);
-        List<ProRole> roles = roleService.findProRole(id);
+        List<ProRole> roles = roleService.findOnlyRoleByPid(id);
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_EDIT_DISABLE,message_args),PMessage.PROJECT_EDIT_DISABLE,id);
@@ -97,7 +95,7 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!=Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         if(ObjectHelper.isEmpty(iterationcauses)) return new HttpResponse(HttpResponse.HTTP_ERROR,"请填写标记理由！");
         projectCoreMapper.updateProjectToHis(id,iterationcauses);
-        List<ProRole> roles = roleService.findProRole(id);
+        List<ProRole> roles = roleService.findOnlyRoleByPid(id);
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_EDIT_HIS,message_args),PMessage.PROJECT_EDIT_HIS,id);
@@ -158,5 +156,15 @@ public class ProjectCoreServiceImpl implements ProjectCoreService {
     @Override
     public List<Map<String,Object>> findModularListByPid(String id) {
         return projectCoreMapper.selectModularListByPid(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> findModularList(ProjectQuery query) {
+        Map<String,Object> paramMap = new HashMap<String,Object>();
+        if(ObjectHelper.isNotEmpty(query.getSearchkey()))paramMap.put("searchkey", query.getSearchkey());
+        if(ObjectHelper.isNotEmpty(query.getProjectid()))paramMap.put("projectid", query.getProjectid());
+        if(ObjectHelper.isNotEmpty(query.getCatalogid()))paramMap.put("catalogid", query.getCatalogid());
+        List<Map<String,Object>> list = projectCoreMapper.selectModularListByQuery(paramMap);
+        return list;
     }
 }

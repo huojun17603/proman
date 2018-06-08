@@ -15,13 +15,15 @@ public class ProPrototype {
     /** 项目ID*/
     private String projectid;
     /** 模块ID */
-    private String modularid;
+    private String catalogid;
     /** 创建人ID */
     private String userid;
     /** 创建人 */
     private String username;
     /** 创建时间 */
     private Date createtime;
+    /** */
+    private Integer isdefault;
     /** 标题 */
     private String title;
     /** 图片的修改，只允许是版本替换的方式 */
@@ -51,12 +53,20 @@ public class ProPrototype {
         this.projectid = projectid;
     }
 
-    public String getModularid() {
-        return modularid;
+    public String getCatalogid() {
+        return catalogid;
     }
 
-    public void setModularid(String modularid) {
-        this.modularid = modularid;
+    public void setCatalogid(String catalogid) {
+        this.catalogid = catalogid;
+    }
+
+    public Integer getIsdefault() {
+        return isdefault;
+    }
+
+    public void setIsdefault(Integer isdefault) {
+        this.isdefault = isdefault;
     }
 
     public String getUserid() {

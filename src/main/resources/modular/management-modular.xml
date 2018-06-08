@@ -9,8 +9,8 @@
 
     <catalog name="用户中心" code="admin-center" sequence="0">
         <menu name="我的信息" code="admin-center-message-index" view="center/messageIndex" />
-        <menu name="我的日志" code="admin-center-note-index" view="center/noteIndex" />
-        <menu name="我的任务" code="admin-center-task-index" view="center/taskndex" />
+        <!--<menu name="我的日志" code="admin-center-note-index" view="center/noteIndex" />-->
+        <menu name="我的任务" code="admin-center-task-index" view="center/taskIndex" />
     </catalog>
 
     <catalog name="项目管理" code="admin-project" sequence="1">

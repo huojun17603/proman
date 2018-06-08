@@ -3,8 +3,8 @@
 <mapper namespace="com.ich.proman.project.mapper.ProPrototypeTagMapper" >
 
     <insert id="insert" parameterType="com.ich.proman.project.pojo.ProPrototypeTag">
-        insert into pro_prototype_tag(id,prototypeid,mapx,mapy,code,content,userid,username,createtime,groupid,groupstatus,iterationcauses,deletecauses)
-        values(#{id},#{prototypeid},#{mapx},#{mapy},#{code},#{content},#{userid},#{username},#{createtime},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
+        insert into pro_prototype_tag(id,prototypeid,mapx,mapy,code,classes,content,userid,username,createtime,groupid,groupstatus,iterationcauses,deletecauses)
+        values(#{id},#{prototypeid},#{mapx},#{mapy},#{code},#{classes},#{content},#{userid},#{username},#{createtime},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
     </insert>
 
     <update id="updateToHis">
@@ -13,6 +13,10 @@
 
     <update id="updateMap">
         update pro_prototype_tag set mapy = #{mapy},mapx = #{mapx} where id = #{id}
+    </update>
+
+    <update id="updateTZForAll">
+        update pro_prototype_tag set content = #{nid} where content = #{oid} and classes = 2
     </update>
 
     <select id="selectById" resultType="com.ich.proman.project.pojo.ProPrototypeTag">
@@ -30,4 +34,5 @@
     <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProPrototypeTag">
         select * from pro_prototype_tag where groupid = #{id} order by createtime desc
     </select>
+
 </mapper>

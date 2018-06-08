@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ich.proman.project.mapper.ProPrototypeCatalogMapper" >
+
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        insert into pro_prototype_catalog(id,projectid,catalogid,fid,prototypeid,prototypename,title,remark)
+        values(#{id},#{projectid},#{catalogid},#{fid},#{prototypeid},#{prototypename},#{title},#{remark})
+    </insert>
+
+    <update id="update"  parameterType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        update pro_prototype_catalog set fid = #{fid},prototypeid = #{prototypeid},prototypename = #{prototypename},title = #{title}, remark = #{remark} where id = #{id}
+    </update>
+    
+    <delete id="delete">
+        delete from pro_prototype_catalog where id = #{id}
+    </delete>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        select * from pro_prototype_catalog where id = #{id}
+    </select>
+
+    <select id="selectByPTitle" resultType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        select * from pro_prototype_catalog where catalogid = #{catalogid} and title = #{title}
+    </select>
+
+    <select id="selectRootList" resultType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        select * from pro_prototype_catalog where catalogid = #{catalogid} and (fid is null or fid ='')
+    </select>
+
+    <select id="selectListByFid" resultType="com.ich.proman.project.pojo.ProPrototypeCatalog">
+        select * from pro_prototype_catalog where catalogid = #{catalogid} and fid = #{fid}
+    </select>
+
+</mapper>

@@ -53,7 +53,7 @@ public class ProFileServiceImpl implements ProFileService {
         file.setGroupid(file.getId());
         file.setGroupstatus(Constant.STATUS_NORMAL);
         fileMapper.insert(file);
-        List<ProRole> roles = roleService.findProRole(project.getId());
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),file.getFilename()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_FILE_CREATE,message_args),PMessage.PROJECT_FILE_CREATE,file.getFilename());
@@ -77,7 +77,7 @@ public class ProFileServiceImpl implements ProFileService {
         proFile.setUsername(employee.getEmployeeName());
         proFile.setCreatetime(day);
         fileMapper.insert(proFile);
-        List<ProRole> roles = roleService.findProRole(project.getId());
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),proFile.getFilename()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_FILE_ITE,message_args),PMessage.PROJECT_FILE_ITE,proFile.getFilename());
@@ -92,7 +92,7 @@ public class ProFileServiceImpl implements ProFileService {
         Project project = projectCoreMapper.selectById(proFile.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         fileMapper.updateToDis(id,deletecauses);
-        List<ProRole> roles = roleService.findProRole(project.getId());
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),proFile.getFilename()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_FILE_DISABLE,message_args),PMessage.PROJECT_FILE_DISABLE,proFile.getFilename());

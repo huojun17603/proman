@@ -1,6 +1,6 @@
 <script type="text/javascript">
     var role_data = [{id:"1",text:"项目经理"},{id:"2",text:"原型设计"},
-        {id:"3",text:"美工"},{id:"4",text:"JAVA开发"},{id:"5",text:"IOS开发"},{id:"6",text:"安卓开发"}];
+        {id:"3",text:"美工"},{id:"4",text:"JAVA开发"},{id:"5",text:"IOS开发"},{id:"6",text:"安卓开发"},{id:"7",text:"测试"}];
     function initCapitalType(value,row,index){
         if(value==1) {
             return "项目经理"
@@ -14,6 +14,8 @@
             return "IOS开发"
         } else if(value==6) {
             return "安卓开发"
+        } else if(value==7) {
+            return "测试"
         } else {
             return "未知"
         }

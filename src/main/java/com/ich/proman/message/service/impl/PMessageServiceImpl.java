@@ -1,17 +1,16 @@
 package com.ich.proman.message.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.ich.admin.dto.LocalEmployee;
 import com.ich.admin.service.impl.LocalEmployeeServiceImpl;
 import com.ich.core.base.IDUtils;
 import com.ich.core.base.ObjectHelper;
 import com.ich.core.http.entity.HttpResponse;
-import com.ich.proman.base.Constant;
+import com.ich.core.http.entity.PageView;
 import com.ich.proman.message.mapper.PMessageMapper;
 import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
-import com.ich.proman.project.pojo.ProRole;
-import com.ich.proman.project.pojo.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,16 +53,20 @@ public class PMessageServiceImpl implements PMessageService {
         PMessage message = messageMapper.selectById(id);
         if(ObjectHelper.isEmpty(message)||message.getStatus()!= PMessage.UNREAD) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的消息！");
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
-        if(!message.getId().equals(employee.getEmployeeId()))
+        if(!message.getUserid().equals(employee.getEmployeeId()))
             return new HttpResponse(HttpResponse.HTTP_ERROR,"用户错误！");
         messageMapper.updateToConfirm(id);
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
     @Override
-    public List<PMessage> findAllList() {
+    public List<PMessage> findAllList(PageView view) {
+        PageHelper.startPage(view.getPage(),view.getRows());
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
-        return messageMapper.selectAllList(employee.getEmployeeId());
+        List<PMessage> list = messageMapper.selectAllList(employee.getEmployeeId());
+        PageInfo<PMessage> pageInfo = new PageInfo<>(list);
+        view.setRowCount(pageInfo.getTotal());
+        return list;
     }
 
     @Override

@@ -3,8 +3,8 @@
 <mapper namespace="com.ich.proman.project.mapper.ProPrototypeMapper" >
 
     <insert id="insert" parameterType="com.ich.proman.project.pojo.ProPrototype">
-        insert into pro_prototype(id,projectid,modularid,userid,username,createtime,title,img,groupid,groupstatus,iterationcauses,deletecauses)
-        values(#{id},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{img},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
+        insert into pro_prototype(id,projectid,catalogid,userid,username,createtime,title,img,groupid,groupstatus,iterationcauses,deletecauses)
+        values(#{id},#{projectid},#{catalogid},#{userid},#{username},#{createtime},#{title},#{img},#{groupid},#{groupstatus},#{iterationcauses},#{deletecauses})
     </insert>
 
     <update id="updateTitle">
@@ -23,20 +23,45 @@
         select * from pro_prototype where id = #{id}
     </select>
 
-    <select id="selectListByMid" resultType="com.ich.proman.project.pojo.ProPrototype">
-        select * from pro_prototype where modularid = #{modularid}
-    </select>
-
-    <select id="selectNormalListByMid" resultType="com.ich.proman.project.pojo.ProPrototype">
-        select * from pro_prototype where modularid = #{modularid} and groupstatus = 1 order by createtime desc
+    <select id="selectNormalListByPCid" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where catalogid = #{catalogid} and groupstatus = 1 order by createtime desc
     </select>
     
-    <select id="selectCountNormalListByMid" resultType="Integer">
-        select count(*) from pro_prototype where modularid = #{modularid} and groupstatus = 1
+    <select id="selectCountNormalListByPCid" resultType="Integer">
+        select count(*) from pro_prototype where catalogid = #{catalogid} and groupstatus = 1
     </select>
 
     <select id="selectVersions" resultType="com.ich.proman.project.pojo.ProPrototype">
         select * from pro_prototype where groupid = #{id} order by createtime desc
+    </select>
+
+    <select id="selectListByQuery" resultType="map" parameterType="map">
+        select
+        t.*,
+        p.title as projectname,
+        p.version as projectversion,
+        m.modularname as modularname
+        from pro_prototype t
+        left join pro_project p on t.projectid = p.id
+        left join pro_modular m on t.catalogid = m.id
+        where 1 = 1
+        <if test="searchkey!=null"> and t.title like '%${searchkey}%'</if>
+        <if test="projectid!=null"> and t.projectid = #{projectid}</if>
+        <if test="catalogid!=null"> and t.catalogid = #{catalogid}</if>
+        <if test="status!=null"> and t.groupstatus = #{status}</if>
+        order by createtime desc
+    </select>
+
+    <update id="updateAllToNoDefault">
+        update pro_prototype set isdefault=0
+    </update>
+
+    <update id="updateDefaultById">
+        update pro_prototype set isdefault=1 where id = #{id}
+    </update>
+
+    <select id="selectDefaultByCatalog" resultType="com.ich.proman.project.pojo.ProPrototype">
+        select * from pro_prototype where catalogid = #{catalogid} and isdefault = 1 and groupstatus = 1
     </select>
 
 </mapper>

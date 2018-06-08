@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ich.proman.project.mapper.ProCatalogMapper" >
+
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProCatalog">
+        insert into pro_catalog(id,projectid,title,remark)
+        values(#{id},#{projectid},#{title},#{remark})
+    </insert>
+
+    <update id="update"  parameterType="com.ich.proman.project.pojo.ProCatalog">
+        update pro_catalog set title = #{title}, remark = #{remark} where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProCatalog">
+        select * from pro_catalog where id = #{id}
+    </select>
+
+    <select id="selectByPTitle" resultType="com.ich.proman.project.pojo.ProCatalog">
+        select * from pro_catalog where projectid = #{projectid} and title = #{title}
+    </select>
+
+    <select id="selectListByQuery" resultType="com.ich.proman.project.pojo.ProCatalog">
+        select
+        t.*,
+        p.title as projectname,
+        p.version as projectversion
+        from pro_catalog t
+        left join pro_project p on t.projectid = p.id
+        where 1 = 1
+        <if test="searchkey!=null"> and t.title like '%${searchkey}%'</if>
+        <if test="projectid!=null"> and t.projectid = #{projectid}</if>
+        order by t.title desc
+    </select>
+
+
+</mapper>

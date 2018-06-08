@@ -2,4 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ich.proman.project.mapper.ProTestMapper" >
     
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProTest">
+        insert into pro_test(id,code,projectid,modularid,userid,username,createtime,title,process,results,status,catalogid,terminal)
+        values(#{id},#{code},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{process},#{results},#{status},#{catalogid},#{terminal})
+    </insert>
+
+    <update id="update" parameterType="com.ich.proman.project.pojo.ProTest">
+        update pro_test set title=#{title},process=#{process},results=#{results} where id = #{id}
+    </update>
+
+    <update id="updateToDel">
+        update pro_test set status = 2 where id = #{id}
+    </update>
+
+    <select id="selectById" resultType="com.ich.proman.project.pojo.ProTest">
+        select * from pro_test where id = #{id}
+    </select>
+
+    <select id="selectByPCode" resultType="com.ich.proman.project.pojo.ProTest">
+        select * from pro_test where projectid = #{projectid} and code = #{code}
+    </select>
+
+    <select id="selectListByQuery" parameterType="map" resultType="map">
+        select
+        t.*,
+        p.title as projectname,
+        p.version as projectversion,
+        m.modularname as modularname,
+        c.title as catalogtitle
+        from pro_test t
+        left join pro_project p on t.projectid = p.id
+        left join pro_modular m on t.modularid = m.id
+        left join pro_catalog c on m.catalogid = c.id
+        where 1 = 1
+        <if test="searchkey!=null"> and t.title like '%${searchkey}%'</if>
+        <if test="projectid!=null"> and t.projectid = #{projectid}</if>
+        <if test="modularid!=null"> and t.modularid = #{modularid}</if>
+        <if test="userid!=null"> and t.userid = #{userid}</if>
+        <if test="status!=null"> and t.status = #{status}</if>
+        <if test="terminal!=null"> and t.terminal = #{terminal}</if>
+        <if test="catalogid!=null"> and c.id = #{catalogid}</if>
+        <if test="order==1">
+            order by createtime desc
+        </if>
+        <if test="order==2">
+            order by catalogid,terminal,modularid,t.title
+        </if>
+    </select>
+
+    <select id="selectListByMid" resultType="com.ich.proman.project.pojo.ProTest">
+        select * from pro_test where modularid = #{modularid}
+    </select>
+
 </mapper>

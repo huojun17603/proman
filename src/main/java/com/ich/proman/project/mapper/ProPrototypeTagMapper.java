@@ -20,4 +20,7 @@ public interface ProPrototypeTagMapper {
     List<ProPrototypeTag> selectNormalListByPid(@Param("prototypeid") String prototypeid);
 
     List<ProPrototypeTag> selectVersions(@Param("id") String id);
+
+    /** 把项目（projectid）下 所有跳转旧原型（oid）的跳转标记更新为跳转（nid）*/
+    void updateTZForAll(@Param("oid")String oid,  @Param("nid")String nid);
 }

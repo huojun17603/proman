@@ -3,8 +3,8 @@
 <mapper namespace="com.ich.proman.project.mapper.ProTaskMapper" >
     
     <insert id="insert" parameterType="com.ich.proman.project.pojo.ProTask">
-        insert into pro_task(id,code,projectid,modularid,userid,username,createtime,title,content,receivetime,completetime,receiveid,receivename,status)
-        values(#{id},#{code},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{content},#{receivetime},#{completetime},#{receiveid},#{receivename},#{status})
+        insert into pro_task(id,code,projectid,modularid,userid,username,createtime,title,content,receivetime,completetime,receiveid,receivename,status,catalogid,terminal,power,estimatetime)
+        values(#{id},#{code},#{projectid},#{modularid},#{userid},#{username},#{createtime},#{title},#{content},#{receivetime},#{completetime},#{receiveid},#{receivename},#{status},#{catalogid},#{terminal},#{power},#{estimatetime})
     </insert>
 
     <update id="delete" parameterType="String">
@@ -12,15 +12,23 @@
     </update>
     
     <update id="updateBase" parameterType="com.ich.proman.project.pojo.ProTask">
-        update pro_task set userid = #{userid},username = #{username},title = #{title},content = #{content} where id = #{id}
+        update pro_task set userid = #{userid},username = #{username},power=#{power},title = #{title},content = #{content} where id = #{id}
+    </update>
+
+    <update id="updateXBase" parameterType="com.ich.proman.project.pojo.ProTask">
+        update pro_task
+        set userid = #{userid},username = #{username},
+        power=#{power},title = #{title},content = #{content},status=#{status},
+        receiveid = #{receiveid},receivename = #{receivename},receivetime = #{receivetime},completetime = #{completetime}
+        where id = #{id}
     </update>
 
     <update id="updateTaskToReceive">
-        update pro_task set receiveid = #{receiveid},receivename = #{receivename},receivetime = now() where id = #{id}
+        update pro_task set status = 2 ,receiveid = #{receiveid},receivename = #{receivename},receivetime = now() where id = #{id}
     </update>
 
     <update id="updateTaskToComplete">
-        update pro_task set completetime = now() where id = #{id}
+        update pro_task set status = 3 ,completetime = now(),compower = #{compower} where id = #{id}
     </update>
 
     <select id="selectById" resultType="com.ich.proman.project.pojo.ProTask">
@@ -36,20 +44,44 @@
     </select>
 
     <select id="selectListByQuery" resultType="map" parameterType="map">
-        select * from pro_task where 1 = 1
-        <if test="searchkey!=null"> and title like '%${title}%'</if>
-        <if test="projectid!=null"> and projectid = #{projectid}</if>
-        <if test="modularid!=null"> and modularid = #{modularid}</if>
-        <if test="userid!=null"> and userid = #{userid}</if>
-        <if test="status!=null"> and status = #{status}</if>
+        select
+            t.*,
+            p.title as projectname,
+            p.version as projectversion,
+            m.modularname as modularname,
+            c.title as catalogtitle
+        from pro_task t
+        left join pro_project p on t.projectid = p.id
+        left join pro_modular m on t.modularid = m.id
+        left join pro_catalog c on m.catalogid = c.id
+        where 1 = 1
+        <if test="searchkey!=null"> and t.title like '%${searchkey}%'</if>
+        <if test="projectid!=null"> and t.projectid = #{projectid}</if>
+        <if test="modularid!=null"> and t.modularid = #{modularid}</if>
+        <if test="userid!=null"> and t.receiveid = #{userid}</if>
+        <if test="status!=null"> and t.status = #{status}</if>
+        <if test="terminal!=null"> and t.terminal = #{terminal}</if>
+        <if test="catalogid!=null"> and c.id = #{catalogid}</if>
+        <if test="order==1">
+            order by createtime desc
+        </if>
+        <if test="order==2">
+            order by catalogid,terminal,modularid,t.code
+        </if>
     </select>
 
     <select id="selectCountListByQuery" resultType="Integer" parameterType="map">
-        select count(*) from pro_task where 1 = 1
+        select count(*)
+        from pro_task t
+        left join pro_project p on t.projectid = p.id
+        left join pro_modular m on t.modularid = m.id
+        left join pro_catalog c on m.catalogid = c.id
+        where 1 = 1
         <if test="searchkey!=null"> and title like '%${title}%'</if>
         <if test="projectid!=null"> and projectid = #{projectid}</if>
         <if test="modularid!=null"> and modularid = #{modularid}</if>
-        <if test="userid!=null"> and userid = #{userid}</if>
+        <if test="terminal!=null"> and t.terminal = #{terminal}</if>
+        <if test="userid!=null"> and receiveid = #{userid}</if>
         <if test="status!=null"> and status = #{status}</if>
     </select>
 

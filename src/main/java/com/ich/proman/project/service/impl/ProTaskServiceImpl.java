@@ -6,22 +6,25 @@ import com.ich.admin.dto.LocalEmployee;
 import com.ich.admin.service.impl.LocalEmployeeServiceImpl;
 import com.ich.core.base.IDUtils;
 import com.ich.core.base.ObjectHelper;
+import com.ich.core.base.TimeUtil;
 import com.ich.core.http.entity.HttpResponse;
 import com.ich.core.http.entity.PageView;
+import com.ich.proman.base.CalculateHours;
 import com.ich.proman.base.Constant;
 import com.ich.proman.base.ProjectQuery;
 import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
+import com.ich.proman.project.controller.TerminalController;
+import com.ich.proman.project.mapper.ProModularMapper;
 import com.ich.proman.project.mapper.ProTaskMapper;
 import com.ich.proman.project.mapper.ProjectCoreMapper;
-import com.ich.proman.project.pojo.ProRole;
-import com.ich.proman.project.pojo.ProTask;
-import com.ich.proman.project.pojo.Project;
+import com.ich.proman.project.pojo.*;
 import com.ich.proman.project.service.ProRoleService;
 import com.ich.proman.project.service.ProTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +38,8 @@ public class ProTaskServiceImpl implements ProTaskService {
     @Autowired
     private ProjectCoreMapper projectCoreMapper;
     @Autowired
+    private ProModularMapper modularMapper;
+    @Autowired
     private ProRoleService roleService;
     @Autowired
     private PMessageService messageService;
@@ -47,6 +52,12 @@ public class ProTaskServiceImpl implements ProTaskService {
         Project project = projectCoreMapper.selectById(task.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         if(ObjectHelper.isEmpty(task.getModularid()))return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择一个模块！");
+        ProModular modular = modularMapper.selectById(task.getModularid());
+        if(ObjectHelper.isEmpty(modular))return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的模块信息！");
+        if(ObjectHelper.isEmpty(task.getTerminal())
+                || !TerminalController.vryTerminals(task.getTerminal()))
+            return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的终端信息！");
+        if(ObjectHelper.isEmpty(task.getPower()))return new HttpResponse(HttpResponse.HTTP_ERROR,"工时不可为空！");
         if(ObjectHelper.isEmpty(task.getTitle()))return new HttpResponse(HttpResponse.HTTP_ERROR,"标题不可为空！");
         if(ObjectHelper.isEmpty(task.getContent()))return new HttpResponse(HttpResponse.HTTP_ERROR,"内容不可为空！");
         if(ObjectHelper.isEmpty(task.getCode()))return new HttpResponse(HttpResponse.HTTP_ERROR,"任务编码不可空！");
@@ -58,9 +69,10 @@ public class ProTaskServiceImpl implements ProTaskService {
         task.setUserid(employee.getEmployeeId());
         task.setUsername(employee.getEmployeeName());
         task.setCreatetime(day);
+        task.setCatalogid(modular.getCatalogid());
         task.setStatus(1);
         taskMapper.insert(task);
-        List<ProRole> roles = roleService.findProRole(project.getId());
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),task.getCode()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_TASK_ADD,message_args),PMessage.PROJECT_TASK_ADD,task.getId());
@@ -78,12 +90,13 @@ public class ProTaskServiceImpl implements ProTaskService {
         if(ObjectHelper.isEmpty(res)||res.getStatus()==3) return new HttpResponse(HttpResponse.HTTP_ERROR,"任务信息错误！");
         if(ObjectHelper.isEmpty(task.getTitle()))return new HttpResponse(HttpResponse.HTTP_ERROR,"标题不可为空！");
         if(ObjectHelper.isEmpty(task.getContent()))return new HttpResponse(HttpResponse.HTTP_ERROR,"内容不可为空！");
+        if(ObjectHelper.isEmpty(task.getPower()))return new HttpResponse(HttpResponse.HTTP_ERROR,"工时不可为空！");
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         task.setUserid(employee.getEmployeeId());
         task.setUsername(employee.getEmployeeName());
         taskMapper.updateBase(task);
         if(ObjectHelper.isNotEmpty(res.getReceiveid())){
-            String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),task.getCode()};
+            String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),res.getCode()};
             messageService.sendMessageToId(res.getReceiveid(), PMessage.findTemplate(PMessage.PROJECT_TASK_EDIT,message_args),PMessage.PROJECT_TASK_EDIT,task.getId());
         }
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
@@ -98,7 +111,7 @@ public class ProTaskServiceImpl implements ProTaskService {
         Project project = projectCoreMapper.selectById(task.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         taskMapper.delete(id);
-        List<ProRole> roles = roleService.findProRole(project.getId());
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
         for(ProRole role : roles){
             String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),task.getCode()};
             messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_TASK_DEL,message_args),PMessage.PROJECT_TASK_DEL,task.getId());
@@ -107,13 +120,14 @@ public class ProTaskServiceImpl implements ProTaskService {
     }
 
     @Override
-    public HttpResponse editTaskToAppoint(String id, String userid, String username) {
+    public HttpResponse editTaskToAppoint(String id,Date estimatetime, String userid, String username) {
         if(ObjectHelper.isEmpty(id))return new HttpResponse(HttpResponse.HTTP_ERROR,"任务信息错误！");
         ProTask task = taskMapper.selectById(id);
         if(ObjectHelper.isEmpty(task)||task.getStatus()==3) return new HttpResponse(HttpResponse.HTTP_ERROR,"任务信息错误！");
         if(ObjectHelper.isEmpty(task.getProjectid())) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         Project project = projectCoreMapper.selectById(task.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
+//        if(ObjectHelper.isEmpty(estimatetime))return new HttpResponse(HttpResponse.HTTP_ERROR,"预计完成时间不可为空！");
         taskMapper.updateTaskToReceive(id,userid,username);
         String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),task.getCode(),username};
         messageService.sendMessageToId(userid, PMessage.findTemplate(PMessage.PROJECT_TASK_APPOINT,message_args),PMessage.PROJECT_TASK_APPOINT,task.getId());
@@ -121,13 +135,14 @@ public class ProTaskServiceImpl implements ProTaskService {
     }
 
     @Override
-    public HttpResponse editTaskToReceive(String id) {
+    public HttpResponse editTaskToReceive(String id,Date estimatetime) {
         if(ObjectHelper.isEmpty(id))return new HttpResponse(HttpResponse.HTTP_ERROR,"任务信息错误！");
         ProTask task = taskMapper.selectById(id);
         if(ObjectHelper.isEmpty(task)||task.getStatus()==3) return new HttpResponse(HttpResponse.HTTP_ERROR,"任务信息错误！");
         if(ObjectHelper.isEmpty(task.getProjectid())) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         Project project = projectCoreMapper.selectById(task.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
+//        if(ObjectHelper.isEmpty(estimatetime))return new HttpResponse(HttpResponse.HTTP_ERROR,"预计完成时间不可为空！");
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         taskMapper.updateTaskToReceive(id,employee.getEmployeeId(),employee.getEmployeeName());
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
@@ -143,7 +158,17 @@ public class ProTaskServiceImpl implements ProTaskService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         if(!employee.getEmployeeId().equals(task.getReceiveid()))return new HttpResponse(HttpResponse.HTTP_ERROR,"只有当前领取人才能完成此任务！");
-        taskMapper.updateTaskToComplete(id);
+        Date day = new Date();
+        CalculateHours ch = new CalculateHours();
+        float comp = ch.calculateHours(TimeUtil.format(task.getReceivetime()), TimeUtil.format(day));
+        BigDecimal b = new BigDecimal(comp);
+        Integer compower =  b.setScale(0,BigDecimal.ROUND_HALF_UP).intValue();
+        taskMapper.updateTaskToComplete(id,compower);
+        List<ProRole> roles = roleService.findOnlyRoleByPid(project.getId());
+        for(ProRole role : roles){
+            String message_args[] = new String[]{project.getTitle(),project.getVersion(),task.getTitle(),task.getCode(),employee.getEmployeeName()};
+            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_TASK_COMPLETE,message_args),PMessage.PROJECT_TASK_COMPLETE,task.getId());
+        }
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
@@ -159,8 +184,15 @@ public class ProTaskServiceImpl implements ProTaskService {
         if(ObjectHelper.isNotEmpty(query.getSearchkey()))paramMap.put("searchkey", query.getSearchkey());
         if(ObjectHelper.isNotEmpty(query.getProjectid()))paramMap.put("projectid", query.getProjectid());
         if(ObjectHelper.isNotEmpty(query.getModularid()))paramMap.put("modularid", query.getModularid());
+        if(ObjectHelper.isNotEmpty(query.getTerminal()))paramMap.put("terminal", query.getTerminal());
+        if(ObjectHelper.isNotEmpty(query.getCatalogid()))paramMap.put("catalogid", query.getCatalogid());
         if(ObjectHelper.isNotEmpty(query.getUserid()))paramMap.put("userid", query.getUserid());
         if(ObjectHelper.isNotEmpty(query.getStatus()))paramMap.put("status", query.getStatus());
+        if(ObjectHelper.isNotEmpty(query.getOrder())){
+            paramMap.put("order", query.getOrder());
+        }else{
+            paramMap.put("order", "1");
+        }
         List<Map<String,Object>> list = taskMapper.selectListByQuery(paramMap);
         PageInfo<Map<String,Object>> pageInfo = new PageInfo<Map<String,Object>>(list);
         view.setRowCount(pageInfo.getTotal());
@@ -173,8 +205,12 @@ public class ProTaskServiceImpl implements ProTaskService {
         if(ObjectHelper.isNotEmpty(query.getSearchkey()))paramMap.put("searchkey", query.getSearchkey());
         if(ObjectHelper.isNotEmpty(query.getProjectid()))paramMap.put("projectid", query.getProjectid());
         if(ObjectHelper.isNotEmpty(query.getModularid()))paramMap.put("modularid", query.getModularid());
+        if(ObjectHelper.isNotEmpty(query.getTerminal()))paramMap.put("terminal", query.getTerminal());
+        if(ObjectHelper.isNotEmpty(query.getCatalogid()))paramMap.put("catalogid", query.getCatalogid());
         if(ObjectHelper.isNotEmpty(query.getUserid()))paramMap.put("userid", query.getUserid());
         if(ObjectHelper.isNotEmpty(query.getStatus()))paramMap.put("status", query.getStatus());
         return taskMapper.selectCountListByQuery(paramMap);
     }
+
+
 }

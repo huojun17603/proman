@@ -16,7 +16,7 @@ public interface ProTaskMapper {
 
     void updateTaskToReceive(@Param("id") String id,@Param("receiveid") String receiveid,@Param("receivename") String receivename);
 
-    void updateTaskToComplete(@Param("id") String id);
+    void updateTaskToComplete(@Param("id") String id, @Param("compower")Integer compower);
 
     ProTask selectById(@Param("id") String id);
 
@@ -27,4 +27,6 @@ public interface ProTaskMapper {
     List<Map<String,Object>> selectListByQuery(Map<String, Object> paramMap);
 
     Integer selectCountListByQuery(Map<String, Object> paramMap);
+
+    void updateXBase(ProTask task);
 }

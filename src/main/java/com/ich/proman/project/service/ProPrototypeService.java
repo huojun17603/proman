@@ -1,6 +1,9 @@
 package com.ich.proman.project.service;
 
 import com.ich.core.http.entity.HttpResponse;
+import com.ich.core.http.entity.PageView;
+import com.ich.proman.base.ProjectQuery;
+import com.ich.proman.project.pojo.ProBug;
 import com.ich.proman.project.pojo.ProPrototype;
 
 import java.util.List;
@@ -18,15 +21,20 @@ public interface ProPrototypeService {
     /** 允许创建者标记版本为删除状态，但必须说明删除原因（目的：仅保留有价值的版本给团队浏览） */
     HttpResponse editPrototypeToDel(String id,String deletecauses);
 
-    /** 获取模块下所有的原型列表（用户验证） */
-    List<ProPrototype> findListByMid(String mid);
-
     /** 获取模块下所有当前有效的原型列表 */
-    List<ProPrototype> findNormalListByMid(String mid);
+    List<ProPrototype> findNormalListByPCid(String catalogid);
 
     /** 获取模块下所有当前有效的原型列表(总数) */
-    Integer findCountNormalListByMid(String mid);
+    Integer findCountNormalListByPCid(String catalogid);
 
     /** 获取历史版本 */
     List<ProPrototype> findVersions(String id);
+
+    List<?> findListByQuery(PageView view, ProjectQuery query);
+
+    ProPrototype findById(String id);
+
+    ProPrototype findDefault(String catalogid);
+
+    HttpResponse editPrototypeToDefault(String id);
 }

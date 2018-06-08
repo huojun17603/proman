@@ -4,6 +4,7 @@
     var prototypeEditDisURL = "project/prototype/edit/dis";
     var prototypeEditImgURL = "project/prototype/edit/img";
     var prototypeHisListURL = "project/prototype/hislist";
+    var prototypeDetailURL = "project/prototype/detail";
 
     var prototypetagDetailURL = "project/prototype/tag/detail";
     var prototypetagListURL = "project/prototype/tag/list";
@@ -12,6 +13,20 @@
     var prototypetagAddURL =  "project/prototype/tag/add";
     var prototypetagMapURL =  "project/prototype/tag/map";
     var prototypetagHisListURL =  "project/prototype/tag/hislist";
+
+    var _p_id = "";
+    var _p_img = "";
+    function lookHis() {
+        var row = $('#prototype_his_datagrid').datalist('getSelected');
+        if(isEmpty(row)){
+            $.messager.alert("提示框","请选择一条数据记录！");
+            return;
+        }
+        _p_id = row.id;
+        _p_img = row.img;
+        initPROCenter(row.id,row.img,false);
+        $("#prototype_his_window").window("close");
+    }
     $(function () {
         $('#prototype_layout').layout();
         $('#tag_layout').layout();
@@ -21,7 +36,9 @@
             checkbox: true,
             lines: true,
             onSelect:function(index,row){
-                initPROCenter(row.id,row.img);
+                _p_id = row.id;
+                _p_img = row.img;
+               initPROCenter(row.id,row.img,false);
             },
             onLoadSuccess: function (data) {
                 if (data.rows.length != 0) {
@@ -205,17 +222,18 @@
 </script>
 <script type="text/javascript">
     function openAddTAGWindow() {
-        var row = $('#prototype_datalist').datalist('getSelected');
-        if(isEmpty(row)){
-            $.messager.alert("提示框","请选择一条数据记录！");
+        if(isEmpty(_p_id)){
+            $.messager.alert("提示框","请选择一个原型界面！");
             return;
         }
         $('#tag_add_window').window('open');
         $('#tag_add_window').window('center');
         $("#tag_add_form").form("clear");
-        $("#tag_add_prototypeid").val(row.id);
+        $("#tag_add_prototypeid").val(_p_id);
         $("#tag_add_mapx").val(0);
         $("#tag_add_mapy").val(0);
+        $("#tag_add_contentname_li").hide();
+        $("#tag_add_content_li").hide();
 
     }
     function addTAG(){
@@ -224,14 +242,25 @@
             data:$("#tag_add_form").serialize(),
             success: function (data){
                 if(data.status==0){
-                    var stly = "top:0;left:0;";
-                    var data_top = "data_top=\"0\"";
-                    var data_left = "data_left=\"0\"";
-                    var tag = "<div id=\""+data.data.id+"\" data_id=\""+data.data.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
-                            "class=\"easyui-draggable prototype_tag\" " + data_top + " " + data_left + " " +
-                            "ondblclick=\"openTAGEditWindow(this)\"></div>"
-                    $("#prototype_center").append(tag);
-                    openTAGlock(true);
+//                    var stly = "top:0;left:0;";
+//                    var data_top = "data_top=\"0\"";
+//                    var data_left = "data_left=\"0\"";
+//                    if(data.data.classes==1){
+//                        var div1 = "<div class=\"prototype_look\" ondblclick=\"openTAGEditWindow('"+data.data.id+"')\"></div>";
+//                        var tag = "<div data_id=\""+data.data.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
+//                                "class=\"prototype_tag\" " + data_top + " " + data_left + " " +
+//                                "onmouseover=\"onmouseover1(this)\" onmouseout=\"onmouseout1(this)\">"+div1+"</div>";
+//                        $("#prototype_center").append(tag);
+//                    }else{
+//                        var div1 = "<div class=\"prototype_dw\" ondblclick=\"GOTOPrototype('"+data.data.content+"')\"></div>";
+//                        var div2 = "<div class=\"prototype_edit\" ondblclick=\"openTAGEditWindow2('"+data.data.id+"','"+img+"')\"></div>";
+//                        var tag = "<div data_id=\""+data.data.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
+//                                "class=\"prototype_tag\" " + data_top + " " + data_left + " " +
+//                                "onmouseover=\"onmouseover2(this)\" onmouseout=\"onmouseout2(this)\">"+div1+ div2 + "</div>";
+//                        $("#prototype_center").append(tag);
+//                    }
+                    initPROCenter(_p_id,_p_img,true);
+
                     closeAddTAGWindow();
                 }else if(data.status==1){
                     $.messager.alert("错误",data.msg,'warning');
@@ -244,9 +273,7 @@
     function closeAddTAGWindow(){
         $('#tag_add_window').window('close');
     }
-    function openImportsTAGWindow() {
-        
-    }
+
     function loadTAGDetail(id){
         $.ajax({
             url: basePath + prototypetagDetailURL,
@@ -264,8 +291,7 @@
             }
         });
     }
-    function openTAGEditWindow(obj){
-        var id = $(obj).attr("data_id");
+    function openTAGEditWindow(id){
         $("#tag_edit_form").form("clear");
         $.ajax({
             url: basePath + prototypetagDetailURL,
@@ -333,11 +359,10 @@
             });
         }
     }
-    function initPROCenter(id,img){
-        openTAGlock(false);
+    function initPROCenter(id,img,flag){
         $("#prototype_center").empty();
-        var img = "<img src=\""+img+"\">";
-        $("#prototype_center").append(img);
+        var img_div = "<img src=\""+img+"\">";
+        $("#prototype_center").append(img_div);
         $.ajax({
             url:basePath+prototypetagListURL,
             data:{pid:id},
@@ -346,12 +371,23 @@
                     var stly = "top:"+item.mapy+";left:"+item.mapx+";";
                     var data_top = "data_top=\""+item.mapy+"\"";
                     var data_left = "data_left=\""+item.mapx+"\"";
-                    var tag = "<div data_id=\""+item.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
-                            "class=\"prototype_tag\" " + data_top + " " + data_left + " " +
-                            "ondblclick=\"openTAGEditWindow(this)\"></div>";
-                    $("#prototype_center").append(tag);
+                    if(item.classes==1){
+                        var div1 = "<div class=\"prototype_look\" ondblclick=\"openTAGEditWindow('"+item.id+"')\"></div>";
+                        var tag = "<div data_id=\""+item.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
+                                "class=\"prototype_tag\" " + data_top + " " + data_left + " " +
+                                "onmouseover=\"onmouseover1(this)\" onmouseout=\"onmouseout1(this)\" >"+div1+"</div>";
+                        $("#prototype_center").append(tag);
+                    }else{
+                        var div1 = "<div class=\"prototype_dw\" ondblclick=\"GOTOPrototype('"+item.content+"')\"></div>";
+                        var div2 = "<div class=\"prototype_edit\" ondblclick=\"openTAGEditWindow2('"+item.id+"')\"></div>";
+                        var tag = "<div data_id=\""+item.id+"\" name=\"prototype_tag\" style=\""+stly+"\" " +
+                                "class=\"prototype_tag\" " + data_top + " " + data_left + " " +
+                                "onmouseover=\"onmouseover2(this)\" onmouseout=\"onmouseout2(this)\" >"+div1+ div2 + "</div>";
+                        $("#prototype_center").append(tag);
+                    }
 
                 });
+                openTAGlock(flag);
             }
         });
     }
@@ -363,6 +399,65 @@
         if (d.top < 0){d.top = 0}
         $(this).attr("data_top",d.top);
         $(this).attr("data_left",d.left);
+    }
+    function onmouseover1(obj) {
+        
+    }
+    function onmouseout1(obj) {
+        
+    }
+    function onmouseover2(obj) {
+        $(obj).children(".prototype_edit").show();
+    }
+    function onmouseout2(obj) {
+        $(obj).children(".prototype_edit").hide();
+    }
+
+    function GOTOPrototype(id) {
+        $.ajax({
+            url: basePath + prototypeDetailURL,
+            data: {id: id},
+            success: function (data) {
+                _p_id = data.data.id;
+                _p_img = data.data.img;
+                initPROCenter(data.data.id,data.data.img,false);
+            }
+        });
+
+    }
+    function openTAGEditWindow2(id){
+        var property={
+            title:"请重新选择原型",
+            dataUrl:"project/prototype/query" + "?status=1&projectid=" + project_id,//数据连接
+            singleSelect:true,//单选/多选
+            searchPrompt:"请输入关键字",//搜索提示
+            columns:[[
+                {field:'title',title:'标题',align:"center",width:200},
+                {field:'createtime',title:'上传时间',align:"center",width:150,formatter:formatterTime},
+                {field:'username',title:'上传人',align:"center",width:100}
+            ]],
+            searchCall:function(dg,value){//搜索值回调
+                dg.datagrid('reload',{searchkey:value});
+            },
+            callback:function(data){//选择值回调
+                $.each(data, function(index, item){
+                    $.ajax({
+                        url:basePath+prototypetagIterationURL,
+                        data:{id:id,content:item.id},
+                        success: function (data){
+                            if(data.status==0){
+                                initPROCenter(_p_id,_p_img,false);
+                            }else if(data.status==1){
+                                $.messager.alert("错误",data.msg,'warning');
+                            }else if(data.status==3){
+                                $.messager.alert("警告","无权访问",'warning');
+                            }
+                        }
+                    });
+                });
+            }
+        };
+        $.createSelector($("#tag_prototype_selector"),property);
     }
 </script>
 
@@ -387,9 +482,18 @@
             <div id="prototype_datalist"></div >
         </div>
         <div id="prototype_center" data-options="region:'center'" style="position: relative">
-<#--            <div dataid="1111" name="prototype_tag"
+
+        <#--   <div dataid="1111" name="prototype_tag"
                  class="easyui-draggable prototype_tag" style="top:10;left: 20;"
-                 data-options="onDrag:onDrag" ondblclick="openTAGEditWindow(this)"></div>-->
+                 data-options="onDrag:onDrag" onmouseover="onmouseover1(this)" onmouseout="onmouseout1(this)">
+                <div class="prototype_look" ondblclick="openTAGEditWindow(this)"></div>
+            </div>
+            <div dataid="1111" name="prototype_tag"
+                 class="easyui-draggable prototype_tag" style="top:10;left: 20;"
+                 data-options="onDrag:onDrag" onmouseover="onmouseover2(this)" onmouseout="onmouseout2(this)" >
+                <div  class="prototype_dw" ondblclick="GOTOPrototype(this)"></div>
+                <div  class="prototype_edit" ondblclick="openTAGEditWindow2(this)"></div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -460,12 +564,49 @@
     <table id="prototype_his_datagrid" style="height:565px;"></table>
     <div id="prototype_his_tool" style="padding:0px;height:auto;overflow: hidden;">
         <div class="sgtz_atn">
-            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="()">查看</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="width:120px"  onclick="lookHis()">查看</a>
         </div>
     </div>
 </div>
 
 <!-- //////////////////////////////////////////////////////////////////////// -->
+<script type="text/javascript">
+    function classesOnSelect(rec) {
+
+        if(rec.value==1){
+            $("#tag_add_contentname_li").hide();
+            $("#tag_add_content_li").show();
+        }else{
+            $("#tag_add_contentname_li").show();
+            $("#tag_add_content_li").hide();
+        }
+    }
+    
+    function openTAGTarget() {
+        var property={
+            title:"原型列表",
+            dataUrl:"project/prototype/query" + "?status=1&projectid=" + project_id,//数据连接
+            singleSelect:true,//单选/多选
+            searchPrompt:"请输入关键字",//搜索提示
+            columns:[[
+                {field:'title',title:'标题',align:"center",width:200},
+                {field:'createtime',title:'上传时间',align:"center",width:150,formatter:formatterTime},
+                {field:'username',title:'上传人',align:"center",width:100}
+            ]],
+            searchCall:function(dg,value){//搜索值回调
+                dg.datagrid('reload',{searchkey:value});
+            },
+            callback:function(data){//选择值回调
+                $.each(data, function(index, item){
+                    $("#tag_add_contentname").val(item.title);
+                    $("#tag_add_content").textbox("setValue",item.id);
+                });
+            }
+        };
+        $.createSelector($("#tag_prototype_selector"),property);
+    }
+</script>
+<div id="tag_prototype_selector"></div>
 
 <div id="tag_add_window" class="easyui-window" title="新增标记"
      data-options="modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,closed:true"
@@ -480,6 +621,17 @@
                 <input id="tag_add_code" name="code" class="easyui-validatebox textbox vipt" >
             </li>
             <li class="fm_1l">
+                <label>标记类型：</label>
+                <select name="classes" class="easyui-combobox vipt" data-options="onSelect:classesOnSelect">
+                    <option value="1">注解标记</option>
+                    <option value="2">跳转标记</option>
+                </select>
+            </li>
+            <li id="tag_add_contentname_li" class="fm_1l">
+                <label>跳转目标：</label>
+                <input id="tag_add_contentname" class="easyui-validatebox textbox vipt" readonly="readonly" onclick="openTAGTarget()">
+            </li>
+            <li id="tag_add_content_li" class="fm_1l">
                 <label>内容：</label>
                 <input id="tag_add_content" name="content" class="easyui-textbox"  multiline="true" labelPosition="top" style="width:70%;height:250px">
             </li>

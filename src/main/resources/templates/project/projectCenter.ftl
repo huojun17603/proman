@@ -13,9 +13,6 @@
         var editToDisURL = "project/edit/del";
         var exeversionURL = "";
 
-        function openModularPage(modularid) {
-            window.location.href = basePath+"project/modular/center?projectid="+project_id+"&modularid="+modularid;
-        }
         function editTitle(){
             $.messager.prompt('新的标题', '请输入新的项目标题！', function(title){
                 if (title){
@@ -114,47 +111,19 @@
             });
         }
 
-        var modularAddURL = "project/modular/add";
-        function opneAddModularWindow() {
-            $('#modular_add_window').window('open');
-            $('#modular_add_window').window('center');
-            $('#modular_add_form').form("clear");
-            $('#modular_add_projectid').val(project_id);
-        }
-        function closeAddModularWindow() {
-            $('#modular_add_window').window('close');
-        }
-        function addModular() {
-            $.ajax({
-                url:basePath+modularAddURL,
-                data:$("#modular_add_form").serialize(),
-                success: function (data){
-                    if(data.status==0){
-                        $.messager.confirm('提示', '完成操作请求！', function(){
-                            window.location.reload();
-                        });
-                    }else if(data.status==1){
-                        $.messager.alert("错误",data.msg,'warning');
-                    }else if(data.status==3){
-                        $.messager.alert("警告","无权访问",'warning');
-                    }
-                }
-            });
-        }
+
 	</script>
   </head>
   
   <body>
-  <#include "file_modular.ftl">
-  <#include "role_modular.ftl">
   <div class="homeDivBox">
       <div class="homeDivBorder">
           <div class="homeDivHead">
               <div>
                   <span class="htl">项目基本信息</span>
-                  <a onclick="openFileWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >查看文件列表</a>
+<#--                  <a onclick="openFileWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >查看文件列表</a>
                   <a onclick="openRoleWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >查看参与列表</a>
-                  <a onclick="opneAddModularWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >新增模块</a>
+                  <a onclick="opneAddModularWindow()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >新增模块</a>-->
                   <a onclick="editTitle()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >修改标题</a>
                   <a onclick="editToHis()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >标记为历史</a>
                   <a onclick="editToDis()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >标记为废弃</a>
@@ -201,7 +170,129 @@
           </div>
       </div>
   </div>
-  <#list modulars as modular>
+  <script type="text/javascript">
+      function openRolePage(){
+          window.location.href = basePath+"project/role/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">参与者管理</span>
+                  <a onclick="openRolePage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openCatalogPage(){
+          window.location.href = basePath+"project/catalog/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">目录管理</span>
+                  <a onclick="openCatalogPage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openModularPage(){
+          window.location.href = basePath+"project/modular/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">模块管理</span>
+                  <a onclick="openModularPage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      //跳转至原型管理中心
+      function openPrototypePage(){
+          window.location.href = basePath+"project/pcatalog/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">原型管理</span>
+                  <a onclick="openPrototypePage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openTaskPage(){
+          window.location.href = basePath+"project/task/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">任务管理</span>
+                  <a onclick="openTaskPage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openTestPage(){
+          window.location.href = basePath+"project/test/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">用例管理</span>
+                  <a onclick="openTestPage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openBUGPage(){
+          window.location.href = basePath+"project/bug/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">BUG管理</span>
+                  <a onclick="openBUGPage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <script type="text/javascript">
+      function openFilePage(){
+          window.location.href = basePath+"project/file/center?projectid="+project_id;
+      }
+  </script>
+  <div class="homeDivBox">
+      <div class="homeDivBorder">
+          <div class="homeDivHead">
+              <div>
+                  <span class="htl">文件管理</span>
+                  <a onclick="openFilePage()"  href="javascript:void(0)" class="easyui-linkbutton" style="float: right;margin-top: 8px;margin-right: 8px" >进入</a>
+              </div>
+          </div>
+      </div>
+  </div>
+
+<#--  <#list modulars as modular>
   <div class="homeDivBox">
       <div class="homeDivBorder">
           <div class="homeDivHead">
@@ -212,23 +303,7 @@
           </div>
       </div>
   </div>
-  </#list>
-  <div id="modular_add_window" class="easyui-window" title="新增模块"
-       data-options="modal:true,collapsible:false,minimizable:false,maximizable:false,resizable:false,closed:true"
-       style="width:400px;height:200px;">
-      <form id="modular_add_form">
-          <input id="modular_add_projectid" name="projectid" type="hidden">
-          <ul class="fm_s" style="overflow: inherit;">
-              <li class="fm_1l">
-                  <label>模块名称：</label>
-                  <input id="modular_addname" name="modularname" class="easyui-validatebox textbox vipt ">
-              </li>
-              <li class="fm_1l" style="text-align: center;padding-top: 20px">
-                  <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok"  style="width:100px"  onclick="addModular()">确认</a>
-                  <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"  style="width:100px"  onclick="closeAddModularWindow()">关闭</a>
-              </li>
-          </ul>
-      </form>
-  </div>
+  </#list>-->
+
   </body>
 </html>

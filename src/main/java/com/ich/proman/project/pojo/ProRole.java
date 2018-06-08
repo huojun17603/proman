@@ -19,6 +19,8 @@ public class ProRole {
     public static Integer PROJECT_IOS_MANAGER = 5;
     /** 安卓开发 */
     public static Integer PROJECT_ANDRIOD_MANAGER = 6;
+    /** 测试 */
+    public static Integer PROJECT_TEST = 7;
 
     public static String FINDROLENAME(Integer role) {
         if(PROJECT_MANAGER.equals(role)){
@@ -38,6 +40,9 @@ public class ProRole {
         }
         if(PROJECT_ANDRIOD_MANAGER.equals(role)){
             return  "安卓开发";
+        }
+        if(PROJECT_TEST.equals(role)){
+            return  "测试";
         }
         return "";
     }

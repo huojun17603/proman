@@ -8,7 +8,7 @@
     </insert>
 
     <update id="updateToConfirm">
-        update pro_message set confirmtime = now() where id = #{id}
+        update pro_message set confirmtime = now(),status = 1 where id = #{id}
     </update>
 
     <select id="selectById" resultType="com.ich.proman.message.pojo.PMessage">

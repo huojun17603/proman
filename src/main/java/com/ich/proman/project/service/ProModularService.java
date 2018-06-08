@@ -10,7 +10,7 @@ public interface ProModularService {
     /**
      * 新增：正常
      */
-    public HttpResponse addModular(String projectid,String modularname,Boolean isdefault);
+    public HttpResponse addModular(String projectid, String catalogid,String modularname,Boolean isdefault);
 
     /**
      * 修改：仅可以修改模块名称

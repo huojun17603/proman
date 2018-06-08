@@ -4,6 +4,7 @@ import com.ich.proman.project.pojo.ProPrototype;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProPrototypeMapper {
 
@@ -17,12 +18,17 @@ public interface ProPrototypeMapper {
 
     ProPrototype selectById(@Param("id")String id);
 
-    List<ProPrototype> selectListByMid(@Param("modularid")String modularid);
-
-    List<ProPrototype> selectNormalListByMid(@Param("modularid")String modularid);
-
-    Integer selectCountNormalListByMid(@Param("modularid")String modularid);
-
     List<ProPrototype> selectVersions(@Param("id")String id);
 
+    List<Map<String,Object>> selectListByQuery(Map<String, Object> paramMap);
+
+    List<ProPrototype> selectNormalListByPCid(@Param("catalogid")String catalogid);
+
+    Integer selectCountNormalListByPCid(@Param("catalogid")String catalogid);
+
+    void updateDefaultById(@Param("id")String id);
+
+    void updateAllToNoDefault();
+
+    ProPrototype selectDefaultByCatalog(@Param("catalogid")String catalogid);
 }

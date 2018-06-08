@@ -35,11 +35,11 @@ public class ProRoleServiceImpl implements ProRoleService {
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"这是一个无效的项目!");
         if(ObjectHelper.isEmpty(role.getUserid())||ObjectHelper.isEmpty(role.getUsername())) return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择参与人员!");
         if(ObjectHelper.isEmpty(role.getRole())) return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择对应角色!");
-        List<ProRole> list = roleMapper.selectByOnly(role.getUserid(),role.getRole());
+        List<ProRole> list = roleMapper.selectByOnly(role.getProjectid(),role.getUserid(),role.getRole());
         if(ObjectHelper.isNotEmpty(list)) return new HttpResponse(HttpResponse.HTTP_ERROR,"此员工已担任当前职位!");
         role.setId(IDUtils.createUUId());
         roleMapper.insert(role);
-        List<ProRole> roles = findProRole(project.getId());
+        List<ProRole> roles = findOnlyRoleByPid(project.getId());
         for(ProRole r : roles){
             if(r.getUserid().equals(role.getUserid())){//自己
                 String message_args[] = new String[]{project.getTitle(),project.getVersion()};
@@ -58,7 +58,7 @@ public class ProRoleServiceImpl implements ProRoleService {
         if(ObjectHelper.isEmpty(role)) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的角色信息!");
         Project project = projectCoreMapper.selectById(role.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"这是一个无效的项目!");
-        List<ProRole> roles = findProRole(project.getId());
+        List<ProRole> roles = findOnlyRoleByPid(project.getId());
         for(ProRole r : roles){
             if(r.getId().equals(id)){//自己
                 String message_args[] = new String[]{project.getTitle(),project.getVersion()};
@@ -73,7 +73,24 @@ public class ProRoleServiceImpl implements ProRoleService {
     }
 
     @Override
-    public List<ProRole> findProRole(String projectid) {
+    public List<ProRole> findProRoles(String projectid) {
         return roleMapper.selectByProId(projectid);
     }
+
+    @Override
+    public List<ProRole> findOnlyRoleByPid(String projectid) {
+        return roleMapper.selectOnlyRoleByPid(projectid);
+    }
+
+    @Override
+    public List<ProRole> selectByUserid(String projectid,String userid) {
+        return roleMapper.selectByUserid(projectid,userid);
+    }
+
+    @Override
+    public ProRole selectByUseridAndRole(String projectid, String userid, Integer role) {
+        return roleMapper.selectByUseridAndRole(projectid,userid,role);
+    }
+
+
 }

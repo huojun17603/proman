@@ -1,8 +1,8 @@
 package com.ich.proman.message.service;
 
 import com.ich.core.http.entity.HttpResponse;
+import com.ich.core.http.entity.PageView;
 import com.ich.proman.message.pojo.PMessage;
-import com.ich.proman.project.pojo.ProRole;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface PMessageService {
 
     public HttpResponse editToConfirm(String id);
 
-    public List<PMessage> findAllList();
+    public List<PMessage> findAllList(PageView view);
 
     public List<PMessage> findUnreadList();
 

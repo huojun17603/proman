@@ -52,8 +52,9 @@
                 data: $('#add_form').serialize(),
                 success: function(data){
                     if(data.status==0){
-                        closedAddWindow();
-                        $.messager.alert("提示框","完成操作请求！");
+                        $.messager.confirm('提示', '完成操作请求！', function(){
+                            window.location.reload();
+                        });
                     }else if(data.status==1){
                         $.messager.alert("错误",data.msg,'warning');
                     }else{

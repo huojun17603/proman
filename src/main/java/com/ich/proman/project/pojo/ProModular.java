@@ -10,6 +10,8 @@ public class ProModular {
     private String id;
     /** 项目ID */
     private String projectid;
+    /** 目录*/
+    private String catalogid;
     /** 模板名称 */
     private String modularname;
     /** 是否默认 */
@@ -29,6 +31,14 @@ public class ProModular {
 
     public void setProjectid(String projectid) {
         this.projectid = projectid;
+    }
+
+    public String getCatalogid() {
+        return catalogid;
+    }
+
+    public void setCatalogid(String catalogid) {
+        this.catalogid = catalogid;
     }
 
     public String getModularname() {

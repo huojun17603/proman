@@ -1,6 +1,5 @@
 <script type="text/javascript">
     var websocket = null;
-
     //判断当前浏览器是否支持WebSocket
     if('WebSocket' in window){
         websocket = new WebSocket("ws://127.0.0.1:8080/websocket");

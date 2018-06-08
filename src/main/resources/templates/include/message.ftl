@@ -25,7 +25,7 @@
             rownumbers:true,//序号
             singleSelect:true,//单选
             columns:[[
-                {field:'createtime',title:'注册时间',align:"center",width:150,formatter:formatterTime},
+                {field:'createtime',title:'创建时间',align:"center",width:150,formatter:formatterTime},
                 //{field:'source',title:'来源',align:"center",width:200,formatter:initSource},
                 {field:'content',title:'内容',width:1000},
                 {field:'status',title:'操作',align:"center",width:80,

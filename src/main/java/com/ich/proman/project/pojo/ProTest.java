@@ -14,6 +14,10 @@ public class ProTest {
     private String projectid;
     /** 模块ID */
     private String modularid;
+    /** 目录ID */
+    private String catalogid;
+
+    private String terminal;
     /** 创建人ID */
     private String userid;
     /** 创建人 */
@@ -22,8 +26,10 @@ public class ProTest {
     private Date createtime;
     /** 标题 */
     private String title;
-    /** 长度2000以内 */
-    private String content;
+    /** 过程 */
+    private String process;
+    /** 结果 */
+    private String results;
     /** 1:正常；2：废弃*/
     private Integer status;
 
@@ -59,6 +65,22 @@ public class ProTest {
         this.modularid = modularid;
     }
 
+    public String getCatalogid() {
+        return catalogid;
+    }
+
+    public void setCatalogid(String catalogid) {
+        this.catalogid = catalogid;
+    }
+
+    public String getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(String terminal) {
+        this.terminal = terminal;
+    }
+
     public String getUserid() {
         return userid;
     }
@@ -91,12 +113,20 @@ public class ProTest {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getProcess() {
+        return process;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setProcess(String process) {
+        this.process = process;
+    }
+
+    public String getResults() {
+        return results;
+    }
+
+    public void setResults(String results) {
+        this.results = results;
     }
 
     public Integer getStatus() {

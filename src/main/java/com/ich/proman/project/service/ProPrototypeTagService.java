@@ -24,4 +24,6 @@ public interface ProPrototypeTagService {
     HttpResponse addTagByImports(String prototypeid, String ids);
 
     HttpResponse findById(String id);
+
+    HttpResponse editToDel(String id);
 }

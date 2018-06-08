@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ich.proman.project.mapper.ProPrototypeLogMapper" >
+
+    <insert id="insert" parameterType="com.ich.proman.project.pojo.ProPrototypeLog">
+        insert into pro_prototype_log(id,logclass,catalogid,prototypeid,prototypetitle,prototypetagid,createtime,userid,username,remark)
+        values(#{id},#{logclass},#{catalogid},#{prototypeid},#{prototypetitle},#{prototypetagid},#{createtime},#{userid},#{username},#{remark})
+    </insert>
+    
+    <select id="selectListByQuery" resultType="map" parameterType="map">
+        select * from pro_prototype_log where 1=1
+        <if test="searchkey!=null"> and prototypetitle like '%${searchkey}%'</if>
+        <if test="catalogid!=null"> and catalogid = #{catalogid}</if>
+        order by createtime desc
+    </select>
+
+</mapper>

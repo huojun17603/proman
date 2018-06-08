@@ -1,17 +1,39 @@
 package com.ich.proman.project.service;
 
+import com.ich.core.http.entity.HttpResponse;
+import com.ich.core.http.entity.PageView;
+import com.ich.proman.base.ProjectQuery;
 import com.ich.proman.project.pojo.ProBug;
+import com.ich.proman.project.pojo.ProTest;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProBugService {
-    List<ProBug> findListByMid(String id);
 
-    //新增：由测试人员从外部收集资料后，提出BUG（业务、数据、视图、错误）
+    /** 新增 */
+    HttpResponse addBUG(ProBug bug);
+    /** 开启 */
+    HttpResponse editToOpen(ProBug bug);
+    /** 测试 */
+    HttpResponse editToTest(String id,String repairremark);
+    /** 完成 */
+    HttpResponse editToCom(String id);
+    /** 重新开启 */
+    HttpResponse editToReopen(String id);
+    /** 关闭 */
+    HttpResponse editToColse(String id,String repairremark);
 
-    //确认：由开发人员确认，即表示BUG是真实存在的
+    /** 指派BUG */
+    HttpResponse editBUGToAppoint(String id,String userid,String username);
+    /** 领取BUG */
+    HttpResponse editBUGToReceive(String id);
 
-    //修复：由开发人员完成修复后告知测试人员
+    ProBug findById(String id);
 
-    //
+    List<Map<String,Object>> findListByQuery(PageView view, ProjectQuery query);
+
+    List<ProBug> findListByMid(String modularid);
+
 }

@@ -8,13 +8,11 @@ import com.ich.core.http.entity.HttpResponse;
 import com.ich.proman.base.Constant;
 import com.ich.proman.message.pojo.PMessage;
 import com.ich.proman.message.service.PMessageService;
+import com.ich.proman.project.mapper.ProPrototypeLogMapper;
 import com.ich.proman.project.mapper.ProPrototypeMapper;
 import com.ich.proman.project.mapper.ProPrototypeTagMapper;
 import com.ich.proman.project.mapper.ProjectCoreMapper;
-import com.ich.proman.project.pojo.ProPrototype;
-import com.ich.proman.project.pojo.ProPrototypeTag;
-import com.ich.proman.project.pojo.ProRole;
-import com.ich.proman.project.pojo.Project;
+import com.ich.proman.project.pojo.*;
 import com.ich.proman.project.service.ProPrototypeTagService;
 import com.ich.proman.project.service.ProRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,8 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
     @Autowired
     private ProjectCoreMapper projectCoreMapper;
     @Autowired
+    private ProPrototypeLogMapper prototypeLogMapper;
+    @Autowired
     private ProRoleService roleService;
     @Autowired
     private PMessageService messageService;
@@ -48,12 +48,15 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
         Project project = projectCoreMapper.selectById(prototype.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         if(ObjectHelper.isEmpty(tag.getContent()))return new HttpResponse(HttpResponse.HTTP_ERROR,"请输入内容！");
-        if(ObjectHelper.isEmpty(tag.getCode()))return new HttpResponse(HttpResponse.HTTP_ERROR,"编号不可为空！");
-        ProPrototypeTag prototypeTag = prototypeTagMapper.selectNormalByCode(tag.getPrototypeid(),tag.getCode());
-        if(ObjectHelper.isNotEmpty(prototypeTag)) return new HttpResponse(HttpResponse.HTTP_ERROR,"已存在的编号！");
+        if(ObjectHelper.isEmpty(tag.getClasses())) return new HttpResponse(HttpResponse.HTTP_ERROR,"请选择标记类型！");
+        if(tag.getClasses()==1){
+            if(ObjectHelper.isEmpty(tag.getCode()))return new HttpResponse(HttpResponse.HTTP_ERROR,"编号不可为空！");
+            ProPrototypeTag prototypeTag = prototypeTagMapper.selectNormalByCode(tag.getPrototypeid(),tag.getCode());
+            if(ObjectHelper.isNotEmpty(prototypeTag)) return new HttpResponse(HttpResponse.HTTP_ERROR,"已存在的编号！");
+        }
         if(ObjectHelper.isEmpty(tag.getMapx())||ObjectHelper.isEmpty(tag.getMapy()))
             return new HttpResponse(HttpResponse.HTTP_ERROR,"请输入坐标！");
-
+        Date day = new Date();
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         tag.setId(IDUtils.createUUId());
         tag.setGroupid(tag.getId());
@@ -62,10 +65,24 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
         tag.setUserid(employee.getEmployeeId());
         tag.setUsername(employee.getEmployeeName());
         this.prototypeTagMapper.insert(tag);
-        List<ProRole> roles = roleService.findProRole(project.getId());
-        for(ProRole role : roles){
-            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
-            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_ADD,message_args),PMessage.PROJECT_PROTOTYPE_TAG_ADD,tag.getId());
+//        List<ProRole> roles = roleService.findProRole(project.getId());
+//        for(ProRole role : roles){
+//            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
+//            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_ADD,message_args),PMessage.PROJECT_PROTOTYPE_TAG_ADD,tag.getId());
+//        }
+        if(tag.getClasses()==1) {
+            ProPrototypeLog log = new ProPrototypeLog();
+            log.setId(IDUtils.createUUId());
+            log.setCatalogid(prototype.getCatalogid());
+            log.setCreatetime(day);
+            log.setLogclass(2);
+            log.setPrototypeid(prototype.getId());
+            log.setPrototypetitle(prototype.getTitle());
+            log.setPrototypetagid(tag.getId());
+            log.setUserid(employee.getEmployeeId());
+            log.setUsername(employee.getEmployeeName());
+            log.setRemark("原型“" + prototype.getTitle() + "”新增标记:"+tag.getCode());
+            prototypeLogMapper.insert(log);
         }
         Map<String,Object> data = new HashMap<>();
         data.put("id",tag.getId());
@@ -89,10 +106,25 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
         tag.setUserid(employee.getEmployeeId());
         tag.setUsername(employee.getEmployeeName());
         this.prototypeTagMapper.insert(tag);
-        List<ProRole> roles = roleService.findProRole(project.getId());
-        for(ProRole role : roles){
-            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
-            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_EDIT,message_args),PMessage.PROJECT_PROTOTYPE_TAG_EDIT,tag.getId());
+//        List<ProRole> roles = roleService.findProRole(project.getId());
+//        for(ProRole role : roles){
+//            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
+//            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_EDIT,message_args),PMessage.PROJECT_PROTOTYPE_TAG_EDIT,tag.getId());
+//        }
+        if(tag.getClasses()==1) {
+            Date day = new Date();
+            ProPrototypeLog log = new ProPrototypeLog();
+            log.setId(IDUtils.createUUId());
+            log.setCatalogid(prototype.getCatalogid());
+            log.setCreatetime(day);
+            log.setLogclass(2);
+            log.setPrototypeid(prototype.getId());
+            log.setPrototypetitle(prototype.getTitle());
+            log.setPrototypetagid(tag.getId());
+            log.setUserid(employee.getEmployeeId());
+            log.setUsername(employee.getEmployeeName());
+            log.setRemark("原型“" + prototype.getTitle() + "”迭代标记:"+tag.getCode());
+            prototypeLogMapper.insert(log);
         }
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
@@ -118,8 +150,8 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
         if(ObjectHelper.isEmpty(prototype.getProjectid())) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
         Project project = projectCoreMapper.selectById(prototype.getProjectid());
         if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
-        ProPrototypeTag prototypeTag = prototypeTagMapper.selectNormalByCode(prototypeid,tag.getCode());
-        if(ObjectHelper.isNotEmpty(prototypeTag)) return new HttpResponse(HttpResponse.HTTP_ERROR,"已存在的编号！");
+//        ProPrototypeTag prototypeTag = prototypeTagMapper.selectNormalByCode(prototypeid,tag.getCode());
+//        if(ObjectHelper.isNotEmpty(prototypeTag)) return new HttpResponse(HttpResponse.HTTP_ERROR,"已存在的编号！");
         LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
         tag.setId(IDUtils.createUUId());
         tag.setPrototypeid(prototypeid);
@@ -131,11 +163,11 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
             this.prototypeTagMapper.insert(obj);
         }
         this.prototypeTagMapper.insert(tag);
-        List<ProRole> roles = roleService.findProRole(project.getId());
-        for(ProRole role : roles){
-            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
-            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_IMPORT,message_args),PMessage.PROJECT_PROTOTYPE_TAG_IMPORT,tag.getId());
-        }
+//        List<ProRole> roles = roleService.findProRole(project.getId());
+//        for(ProRole role : roles){
+//            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
+//            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_IMPORT,message_args),PMessage.PROJECT_PROTOTYPE_TAG_IMPORT,tag.getId());
+//        }
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 
@@ -162,5 +194,37 @@ public class ProPrototypeTagServiceImpl implements ProPrototypeTagService {
     public HttpResponse findById(String id) {
         ProPrototypeTag tag = prototypeTagMapper.selectById(id);
         return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK,tag);
+    }
+
+    @Override
+    public HttpResponse editToDel(String id) {
+        ProPrototypeTag tag = prototypeTagMapper.selectById(id);
+        ProPrototype prototype = this.prototypeMapper.selectById(tag.getPrototypeid());
+        if(ObjectHelper.isEmpty(prototype.getProjectid())) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
+        Project project = projectCoreMapper.selectById(prototype.getProjectid());
+        if(ObjectHelper.isEmpty(project)||project.getStatus()!= Constant.STATUS_NORMAL) return new HttpResponse(HttpResponse.HTTP_ERROR,"无效的项目信息！");
+        this.prototypeTagMapper.updateToHis(id);
+//        List<ProRole> roles = roleService.findProRole(project.getId());
+//        for(ProRole role : roles){
+//            String message_args[] = new String[]{project.getTitle(),project.getVersion(),prototype.getTitle(),tag.getCode()};
+//            messageService.sendMessageToId(role.getUserid(), PMessage.findTemplate(PMessage.PROJECT_PROTOTYPE_TAG_EDIT,message_args),PMessage.PROJECT_PROTOTYPE_TAG_EDIT,tag.getId());
+//        }
+        if(tag.getClasses()==1) {
+            Date day = new Date();
+            LocalEmployee employee = localEmployeeServiceImpl.findLocalEmployee();
+            ProPrototypeLog log = new ProPrototypeLog();
+            log.setId(IDUtils.createUUId());
+            log.setCatalogid(prototype.getCatalogid());
+            log.setCreatetime(day);
+            log.setLogclass(2);
+            log.setPrototypeid(prototype.getId());
+            log.setPrototypetitle(prototype.getTitle());
+            log.setPrototypetagid(tag.getId());
+            log.setUserid(employee.getEmployeeId());
+            log.setUsername(employee.getEmployeeName());
+            log.setRemark("原型“" + prototype.getTitle() + "”废弃标记:"+tag.getCode());
+            prototypeLogMapper.insert(log);
+        }
+        return new HttpResponse(HttpResponse.HTTP_OK,HttpResponse.HTTP_MSG_OK);
     }
 }

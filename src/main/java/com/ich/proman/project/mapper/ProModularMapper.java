@@ -19,4 +19,6 @@ public interface ProModularMapper {
     List<ProModular> selectByName(@Param("modularname") String modularname);
 
     Map<String,Object> selectModularDetailById(@Param("id")String id);
+
+    List<ProModular> selectByPName(@Param("projectid") String projectid,@Param("catalogid")String catalogid,@Param("modularname")  String modularname);
 }

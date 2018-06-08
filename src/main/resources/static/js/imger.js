@@ -231,10 +231,10 @@ function OPEN_LOAD_WIN(property){
 	ZXXFILE.onComplete = function() {
 		//alert("<p>当前图片全部上传完毕，可继续添加上传。</p>");
 	}
-	if(!init_ZXXFILE){
+	// if(!init_ZXXFILE){
 		ZXXFILE.init();
-		init_ZXXFILE = !init_ZXXFILE;
-	}
+	// 	init_ZXXFILE = !init_ZXXFILE;
+	// }
     $("#"+property.uploadify).val("");
     $("#"+property.uploadify).click();
 }

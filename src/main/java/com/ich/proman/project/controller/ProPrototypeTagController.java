@@ -86,4 +86,12 @@ public class ProPrototypeTagController extends PromanController {
         HttpResponse response = this.prototypeTagService.addTagByImports(prototypeid,ids);
         return callback(callback, response);
     }
+
+    @RequestMapping("project/prototype/tag/del")
+    @ResponseBody
+    @Link(name = "原型标记-删除",code = "admin-project-prototype-tag-del",parent = "admin-project-center-index", level = Link.LEVEL_NONE)
+    public String del(String id,String callback){
+            HttpResponse response = this.prototypeTagService.editToDel(id);
+        return callback(callback, response);
+    }
 }

@@ -150,9 +150,20 @@ public class PMessage {
 
     /** 用例 ：好像没有通知的必要*/
 
-    /** BUG:新增 */
+    /** BUG:新增（通知测试人员确认） */
     public static Integer PROJECT_BUG_CREATE = 800;
     /** BUG:确认 */
+    public static Integer PROJECT_BUG_OPEN = 801;
+    /** BUG:待测试 */
+    public static Integer PROJECT_BUG_TEST = 802;
+    /** BUG:重新开启 */
+    public static Integer PROJECT_BUG_REOPEN = 803;
+    /** BUG:完成 */
+    public static Integer PROJECT_BUG_COM = 804;
+    /** BUG:关闭 */
+    public static Integer PROJECT_BUG_CLOSE = 805;
+    /** BUG:指派 */
+    public static Integer PROJECT_BUG_APPOINT = 806;
 
     /** 文件：新增 */
     public static Integer PROJECT_FILE_CREATE = 900;
@@ -250,7 +261,24 @@ public class PMessage {
             /*/项目：用例/*/
 
             /*/项目：BUG/*/
-
+            if (PROJECT_BUG_CREATE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），新增BUG《"+args[2]+"》，等待确认";
+            }
+            if (PROJECT_BUG_TEST.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），BUG《"+args[2]+"》已完成修复，等待测试";
+            }
+            if (PROJECT_BUG_COM.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），BUG《"+args[2]+"》已确认完成修复";
+            }
+            if (PROJECT_BUG_REOPEN.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），BUG《"+args[2]+"》修复失败，重新开启";
+            }
+            if (PROJECT_BUG_CLOSE.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），BUG《"+args[2]+"》关闭";
+            }
+            if (PROJECT_BUG_APPOINT.equals(source)) {
+                result = "项目：" + args[0] + "（" + args[1] + "），BUG《"+args[2]+"》已指派给你！";
+            }
             /*/项目：文件/*/
             if (PROJECT_FILE_CREATE.equals(source)) {
                 result = "项目：" + args[0] + "（" + args[1] + "），新增文件："+ args[2];

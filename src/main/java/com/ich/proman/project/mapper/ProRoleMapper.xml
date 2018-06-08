@@ -18,9 +18,20 @@
     <select id="selectByProId" resultType="com.ich.proman.project.pojo.ProRole">
         select * from pro_role where projectid = #{projectid}
     </select>
-
-    <select id="selectByOnly" resultType="com.ich.proman.project.pojo.ProRole">
-        select * from pro_role where userid = #{userid}
+    
+    <select id="selectOnlyRoleByPid" resultType="com.ich.proman.project.pojo.ProRole">
+        select * from pro_role where projectid = #{projectid} group by userid
     </select>
 
+    <select id="selectByOnly" resultType="com.ich.proman.project.pojo.ProRole">
+        select * from pro_role where userid = #{userid} and projectid = #{projectid} and role = #{role}
+    </select>
+    
+    <select id="selectByUserid" resultType="com.ich.proman.project.pojo.ProRole">
+        select * from pro_role where userid = #{userid} and projectid = #{projectid}
+    </select>
+
+    <select id="selectByUseridAndRole" resultType="com.ich.proman.project.pojo.ProRole">
+        select * from pro_role where userid = #{userid} and projectid = #{projectid}  and role = #{role}
+    </select>
 </mapper>

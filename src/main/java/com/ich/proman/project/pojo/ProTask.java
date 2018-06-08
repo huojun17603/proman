@@ -9,6 +9,8 @@ public class ProTask {
     private String code;
     /** 项目ID*/
     private String projectid;
+    /** 目录ID */
+    private String catalogid;
     /** 模块ID */
     private String modularid;
     /** 创建人ID */
@@ -29,8 +31,16 @@ public class ProTask {
     private String receiveid;
     /** 领取人 */
     private String receivename;
-
+    /** 1：代领；2：已领；3：完成；4：删除 */
     private Integer status;
+
+    private String terminal;
+    /** 工时：按小时（一天按8小时间算）*/
+    private Integer power;
+    /** 完成实际花费工时：按小时（一天按8小时间算）*/
+    private Integer compower;
+    /** 领取时填写:预计完成时间 */
+    private Date estimatetime;
 
     public String getCode() {
         return code;
@@ -62,6 +72,14 @@ public class ProTask {
 
     public void setProjectid(String projectid) {
         this.projectid = projectid;
+    }
+
+    public String getCatalogid() {
+        return catalogid;
+    }
+
+    public void setCatalogid(String catalogid) {
+        this.catalogid = catalogid;
     }
 
     public String getModularid() {
@@ -142,5 +160,37 @@ public class ProTask {
 
     public void setReceivename(String receivename) {
         this.receivename = receivename;
+    }
+
+    public String getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(String terminal) {
+        this.terminal = terminal;
+    }
+
+    public Integer getPower() {
+        return power;
+    }
+
+    public void setPower(Integer power) {
+        this.power = power;
+    }
+
+    public Date getEstimatetime() {
+        return estimatetime;
+    }
+
+    public void setEstimatetime(Date estimatetime) {
+        this.estimatetime = estimatetime;
+    }
+
+    public Integer getCompower() {
+        return compower;
+    }
+
+    public void setCompower(Integer compower) {
+        this.compower = compower;
     }
 }

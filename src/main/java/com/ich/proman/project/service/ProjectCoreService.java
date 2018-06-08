@@ -1,6 +1,7 @@
 package com.ich.proman.project.service;
 
 import com.ich.core.http.entity.HttpResponse;
+import com.ich.proman.base.ProjectQuery;
 import com.ich.proman.project.pojo.ProModular;
 import com.ich.proman.project.pojo.ProRole;
 import com.ich.proman.project.pojo.Project;
@@ -54,4 +55,6 @@ public interface ProjectCoreService {
     Project findById(String id);
 
     List<Map<String,Object>>  findModularListByPid(String id);
+
+    List<Map<String,Object>> findModularList(ProjectQuery query);
 }

@@ -1,10 +1,16 @@
 package com.ich.proman.base;
 
+import java.io.File;
+
 public class ProjectQuery {
 
     private String searchkey;
 
+    private String catalogid;
+
     private String projectid;
+
+    private String terminal;
 
     private String modularid;
 
@@ -18,12 +24,22 @@ public class ProjectQuery {
 
     private String etime;
 
+    private String order;
+
     public String getSearchkey() {
         return searchkey;
     }
 
     public void setSearchkey(String searchkey) {
         this.searchkey = searchkey;
+    }
+
+    public String getCatalogid() {
+        return catalogid;
+    }
+
+    public void setCatalogid(String catalogid) {
+        this.catalogid = catalogid;
     }
 
     public String getProjectid() {
@@ -80,5 +96,21 @@ public class ProjectQuery {
 
     public void setEtime(String etime) {
         this.etime = etime;
+    }
+
+    public String getTerminal() {
+        return terminal;
+    }
+
+    public void setTerminal(String terminal) {
+        this.terminal = terminal;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

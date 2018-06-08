@@ -27,4 +27,6 @@ public interface ProjectCoreMapper {
     List<Project> selectVersionById(@Param("id") String id);
 
     List<Map<String,Object>> selectModularListByPid(@Param("id") String id);
+
+    List<Map<String,Object>> selectModularListByQuery(Map<String, Object> paramMap);
 }

@@ -18,6 +18,11 @@ public interface ProRoleService {
     public HttpResponse deleteRole(String id);
 
     /** 获取此项目下的所有角色 */
-    public List<ProRole> findProRole(String projectid);
+    public List<ProRole> findProRoles(String projectid);
 
+    public List<ProRole> findOnlyRoleByPid(String projectid);
+
+    List<ProRole> selectByUserid(String projectid,String userid);
+
+    ProRole selectByUseridAndRole(String projectid,String userid,Integer role);
 }

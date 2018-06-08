@@ -40,14 +40,36 @@
     </select>
 
     <select id="selectModularListByPid" resultType="map">
-        select m.*,
-        (select count(*) from pro_prototype where modularid = m.id and groupstatus = 1) as prototypenum,
+        select m.*,c.title as catalogtitle,
         (select count(*) from pro_task where modularid = m.id ) as tasknum,
         (select count(*) from pro_test where modularid = m.id ) as testnum,
         (select count(*) from pro_bug where modularid = m.id ) as bugnum,
         (select count(*) from pro_design where modularid = m.id) as designnum,
         (select count(*) from pro_file where modularid = m.id and groupstatus = 1) as filenum
-        from pro_modular m where m.projectid = #{id}
+        from pro_modular m
+        left join pro_catalog c on c.id = m.catalogid
+        where m.projectid = #{id}
+        order by c.title ,m.modularname
     </select>
 
+    <select id="selectModularListByQuery" parameterType="map" resultType="map">
+        select
+        m.*,
+        p.title as projectname,
+        p.version as projectversion,
+        c.title as catalogtitle,
+        (select count(*) from pro_task where modularid = m.id ) as tasknum,
+        (select count(*) from pro_test where modularid = m.id ) as testnum,
+        (select count(*) from pro_bug where modularid = m.id ) as bugnum,
+        (select count(*) from pro_design where modularid = m.id) as designnum,
+        (select count(*) from pro_file where modularid = m.id and groupstatus = 1) as filenum
+        from pro_modular m
+        left join pro_project p on m.projectid = p.id
+        left join pro_catalog c on c.id = m.catalogid
+        where 1=1
+        <if test="searchkey!=null"> and m.modularname like '%${searchkey}%'</if>
+        <if test="projectid!=null"> and m.projectid = #{projectid}</if>
+        <if test="catalogid!=null"> and c.id = #{catalogid}</if>
+        order by c.title ,m.modularname
+    </select>
 </mapper>

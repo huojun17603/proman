@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,12 +23,21 @@ public class ProRoleController extends PromanController {
     @Autowired
     private ProRoleService roleService;
 
+    @RequestMapping("project/role/center")
+    @Link(name = "角色-角色管理中心",code = "admin-project-role-center",parent = "admin-project-center-index", level = Link.LEVEL_NONE)
+    public ModelAndView center(String projectid , String callback){
+        String viewname = "project/roleCenter";
+        Map<String,Object> model = new HashMap<>();
+        model.put("projectid",projectid);
+        return new ModelAndView(viewname,model);
+    }
+
     @RequestMapping("project/role/list")
     @ResponseBody
     @Link(name = "角色-项目角色列表",code = "admin-project-role-list",parent = "admin-project-center-index", level = Link.LEVEL_NONE)
     public String roleList(String projectid,String callback){
         Map<String,Object> model = getSuccessMap();
-        List<ProRole> result = this.roleService.findProRole(projectid);
+        List<ProRole> result = this.roleService.findProRoles(projectid);
         model.put(HttpEasyUIResponse.HTTP_DATA_PAGE_TOTAL, result.size());
         model.put(HttpEasyUIResponse.HTTP_DATA_PAGE_ROWS, result);
         return callback(callback, JsonUtils.objectToJson(model));
